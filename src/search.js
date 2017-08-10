@@ -1,6 +1,6 @@
 const path = require('path');
 const fs = require('fs');
-const config = require('../skyuxconfig.json');
+const config = require(path.join(process.cwd(), 'skyuxconfig.json'));
 
 const template = `// Use browser to access other sites (that are running angular)
 import { browser, element, by } from 'protractor';
@@ -52,6 +52,10 @@ describe('Search Results', () => {
   it('should generate search results', (done) => {
     let config = JSON.parse(browser.params.skyPagesConfig);
     let appName = config.skyux.name;
+    if (!appName) {
+      const packageFile = require('../package.json');
+      appName = packageFile.name;
+    }
     let url = config.skyux.host.url;
     let content = {
       name: appName,
