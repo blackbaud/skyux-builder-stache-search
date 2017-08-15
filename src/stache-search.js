@@ -121,9 +121,7 @@ describe('Search Results', () => {
         }
         return writeSearchFile(searchDirPath);
       })
-      .then(() => {
-        done();
-      })
+      .then(() => done())
       .catch(error => {
         console.log('ERROR', error);
         expect(error).toBeNull();
