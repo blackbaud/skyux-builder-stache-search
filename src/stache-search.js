@@ -118,7 +118,6 @@ describe('Search Results', () => {
 
         if (!fs.existsSync(searchDirPath)) {
           fs.mkdirSync(searchDirPath);
-          return writeSearchFile(searchDirPath);
         }
         return writeSearchFile(searchDirPath);
       })
