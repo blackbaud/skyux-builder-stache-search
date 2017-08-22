@@ -1,5 +1,5 @@
 {
-  "name": "stache-search",
+  "name": "@blackbaud/skyux-builder-stache-search",
   "version": "1.0.0",
   "description": "This script is used to scrape Stache 2 sites and consolidate the content into a JSON blob for indexing.",
   "main": "index.js",

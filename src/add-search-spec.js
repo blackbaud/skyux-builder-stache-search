@@ -1,6 +1,5 @@
 const path = require('path');
 const fs = require('fs');
-const config = require(path.join(process.cwd(), 'skyuxconfig.json'));
 
 const template = `// Use browser to access other sites (that are running angular)
 import { browser, element, by } from 'protractor';
@@ -134,17 +133,18 @@ describe('Search Results', () => {
 });
 `
 
-function addSearchSpecToProject() {
-    try {
-        if (!fs.existsSync('e2e')) {
-            fs.mkdirSync('e2e');
+function addSearchSpecToProject(argv, config) {
+    if (config.appSettings.search) {
+        try {
+            let filePath = path.join(process.cwd(), 'e2e');
+            if (!fs.existsSync(filePath)) {
+                fs.mkdirSync(filePath);
+            }
+            fs.writeFileSync(path.join(filePath, 'stache-search.e2e-spec.ts'), template);
+        } catch (error) {
+            throw new Error('[ERROR]: Unable to add stache search template to e2e directory.');
         }
-        fs.writeFileSync(path.join('e2e', 'stache-search.e2e-spec.ts'), template);
-    } catch (error) {
-        throw new Error('[ERROR]: Unable to add stache search template to e2e directory.');
     }
 }
 
-if (config.appSettings.search) {
-    addSearchSpecToProject();
-}
+module.exports = addSearchSpecToProject;
