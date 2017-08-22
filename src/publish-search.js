@@ -39,14 +39,11 @@ function publishSearch(argv, config) {
     };
 
     return new Promise((resolve, reject) => {
-        let rawData = '';
         let request = https.request(options, res => {
-            res.on('data', chunk => {
-                rawData += chunk;
-            });
             res.on('end', () => {
-                let parsedData = JSON.parse(rawData);
-                resolve(parsedData);
+                console.log('Stache data successfully posted!');
+                res.send('ok');
+                resolve();
             });
             res.on('error', error => {
                 reject(new Error(`[ERROR]: Unable to post search data! ${error.message}`));
