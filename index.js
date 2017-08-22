@@ -1,5 +1,6 @@
 const path = require('path');
 const config = require(path.join(process.cwd(), 'skyuxconfig.json'));
+
 module.exports = {
     runCommand: (command, argv) => {
         switch (command) {

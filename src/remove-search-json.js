@@ -1,5 +1,3 @@
-// remove search json blob after publication
-
 const fs = require('fs');
 const path = require('path');
 
@@ -12,7 +10,6 @@ function removeSearchJsonFileFromProject(argv, config) {
                 fs.rmdirSync(filePath.slice(0, -11));
             }
         } catch (error) {
-            console.log(error);
             throw new Error('[ERROR]: Unable to remove stache search directory.');
         }
     }
