@@ -1,7 +1,8 @@
 const path = require('path');
 const fs = require('fs');
 
-const template = `// Use browser to access other sites (that are running angular)
+const template = `
+// Use browser to access other sites (that are running angular)
 import { browser, element, by } from 'protractor';
 
 // Use SkyHostBrowser to access your locally served SPA
@@ -10,9 +11,9 @@ import { SkyHostBrowser } from '@blackbaud/skyux-builder/runtime/testing/e2e';
 const fs = require('fs');
 const path = require('path');
 
-const walkSync = (dir, filePaths: string[] = []) => {
+const walkSync = (dir: string, filePaths: string[] = []) => {
   let files = fs.readdirSync(dir);
-  files.forEach(file => {
+  files.forEach((file: string) => {
     if (fs.statSync(path.join(dir, file)).isDirectory()) {
       filePaths = walkSync(path.join(dir, file), filePaths);
     } else {
@@ -25,7 +26,7 @@ const walkSync = (dir, filePaths: string[] = []) => {
 };
 
 describe('Search Results', () => {
-  let files;
+  let files: string[];
 
   function removeUnnecessaryElements() {
     Array.from(
@@ -56,25 +57,25 @@ describe('Search Results', () => {
       appName = packageFile.name;
     }
     let url = config.skyux.host.url;
-    let content = {
+    let content: any = {
       name: appName,
       url: url
     };
 
-    function writeSearchFile(searchDirPath) {
+    function writeSearchFile(searchDirPath: string) {
       return new Promise((resolve, reject) => {
         fs.writeFile(
           path.join(searchDirPath, 'search.json'),
           JSON.stringify(content),
-          (err) => {
-            err ? reject(err) : resolve();
+          (error: any) => {
+            error ? reject(error) : resolve();
           }
         );
       });
     }
 
     function scrapePageContent(file: string) {
-      let pageContent = { path: file };
+      let pageContent: any = { path: file };
       return SkyHostBrowser
         .get(file)
         .then(() => {
@@ -83,15 +84,15 @@ describe('Search Results', () => {
         .then(() => {
             return element(by.css('.stache-wrapper')).getText();
         })
-        .then(text => {
+        .then((text: string) => {
           pageContent['text'] = text;
           return element(by.css('.stache-page-title')).getText();
         })
-        .then(text => {
+        .then((text: string) => {
           pageContent['title'] = text;
           return pageContent;
         })
-        .catch(error => {
+        .catch((error: any) => {
           if (error.name === 'NoSuchElementError') {
             console.log('Must have the <stache> tag and a pageTitle on page to scrape content.');
             return pageContent;
@@ -121,7 +122,7 @@ describe('Search Results', () => {
         return writeSearchFile(searchDirPath);
       })
       .then(() => done())
-      .catch(error => {
+      .catch((error: any) => {
         console.log('ERROR', error);
         expect(error).toBeNull();
         done();

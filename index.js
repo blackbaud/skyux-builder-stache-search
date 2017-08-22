@@ -10,7 +10,7 @@ module.exports = {
                 require('./src/publish-search')(argv, config);
                 break;
             case 'remove-search-json':
-                require('/src/remove-search-json')(argv, config);
+                require('./src/remove-search-json')(argv, config);
                 break;
             case 'remove-search-spec':
                 require('./src/remove-search-spec')(argv, config);
