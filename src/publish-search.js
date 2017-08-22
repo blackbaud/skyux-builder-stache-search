@@ -42,7 +42,6 @@ function publishSearch(argv, config) {
         let request = https.request(options, res => {
             res.on('end', () => {
                 console.log('Stache data successfully posted!');
-                res.send('ok');
                 resolve();
             });
             res.on('error', error => {
