@@ -2,6 +2,7 @@ const https = require('https');
 const fs = require('fs');
 const path = require('path');
 const endpoint = process.env.searchEndpoint;
+const port = process.env.searchPort;
 const token = process.env.token;
 const filePath = path.join(process.cwd(), 'src', 'stache', 'search', 'search.json');
 
@@ -15,7 +16,7 @@ if (!token) {
 
 function getSearchData() {
     try {
-        return fs.readFileSync(filePath);
+        return fs.readFileSync(filePath, 'utf8');
     } catch (error) {
         throw new Error(`[ERROR]: Unable to read search file at ${filePath}! ${error.message}`);
     }
@@ -29,6 +30,7 @@ function publishSearch(argv, config) {
 
     const options = {
         hostname: endpoint,
+        port: port,
         path: '/publisher',
         method: 'POST',
         headers: {

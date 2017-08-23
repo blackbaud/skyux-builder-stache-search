@@ -114,7 +114,7 @@ describe('Search Results', () => {
           'search'
         );
 
-        content['content'] = pageContents;
+        content['contents'] = pageContents;
 
         if (!fs.existsSync(searchDirPath)) {
           fs.mkdirSync(searchDirPath);
