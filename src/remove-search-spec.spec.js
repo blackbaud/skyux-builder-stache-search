@@ -1,6 +1,5 @@
 const fs = require('fs');
 const mock = require('mock-require');
-// const path = require('path');
 
 describe('Remove Search Spec', () => {
     let removeSearchSpec;
@@ -34,7 +33,7 @@ describe('Remove Search Spec', () => {
         removeSearchSpec = mock.reRequire('./remove-search-spec');
     });
 
-    it('should not remove the file if search is not set to true', () => {
+    it('should not remove the file if search is false', () => {
         spyOn(fs, 'existsSync');
         removeSearchSpec([], config);
         expect(fs.existsSync).not.toHaveBeenCalled();
