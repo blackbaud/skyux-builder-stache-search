@@ -28,5 +28,9 @@
     "mkdirp": "^0.5.1",
     "mock-require": "^2.0.2",
     "rimraf": "^2.6.1"
+  },
+  "dependencies": {
+    "fs-extra": "^4.0.1",
+    "request": "^2.81.0"
   }
 }

@@ -1,6 +1,9 @@
 const path = require('path');
 const config = require(path.join(process.cwd(), 'skyuxconfig.json'));
 
+// Intentionally not handling a default case. Not found commands handled
+// by SKYUX CLI
+
 module.exports = {
     runCommand: (command, argv) => {
         switch (command) {
@@ -15,9 +18,6 @@ module.exports = {
                 break;
             case 'remove-search-spec':
                 require('./src/remove-search-spec')(argv, config);
-                break;
-            default: 
-                console.log(`@blackbaud/skyux-builder: Unknown command ${command}`);
                 break;
         }
     }
