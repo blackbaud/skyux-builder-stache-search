@@ -1,3 +1,5 @@
+'use strict';
+
 const mock = require('mock-require');
 const fs = require('fs');
 

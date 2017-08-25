@@ -1,3 +1,5 @@
+'use strict';
+
 const fs = require('fs-extra');
 const request = require('request');
 const path = require('path');
