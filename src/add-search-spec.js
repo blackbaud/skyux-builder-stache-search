@@ -75,7 +75,7 @@ describe('Search Results', () => {
     function scrapePageContent(file: string) {
       let pageContent: any = {
         host: url,
-        siteName: siteName,
+        site_name: siteName,
         path: file
       };
 
