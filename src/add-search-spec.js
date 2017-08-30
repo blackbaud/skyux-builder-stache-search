@@ -3,8 +3,7 @@
 const path = require('path');
 const fs = require('fs');
 
-const template = `
-// Use browser to access other sites (that are running angular)
+const template = `// Use browser to access other sites (that are running angular)
 import { browser, element, by } from 'protractor';
 
 // Use SkyHostBrowser to access your locally served SPA
@@ -53,16 +52,13 @@ describe('Search Results', () => {
 
   it('should generate search results', (done) => {
     let config = JSON.parse(browser.params.skyPagesConfig);
-    let appName = config.skyux.name;
-    if (!appName) {
+    let siteName = config.skyux.name;
+    if (!siteName) {
       const packageFile = require('../package.json');
-      appName = packageFile.name;
+      siteName = packageFile.name;
     }
     let url = config.skyux.host.url;
-    let content: any = {
-      name: appName,
-      url: url
-    };
+    let content: any[] = [];
 
     function writeSearchFile(searchDirPath: string) {
       return new Promise((resolve, reject) => {
@@ -77,7 +73,12 @@ describe('Search Results', () => {
     }
 
     function scrapePageContent(file: string) {
-      let pageContent: any = { path: file };
+      let pageContent: any = {
+        host: url,
+        siteName: siteName,
+        path: file
+      };
+
       return SkyHostBrowser
         .get(file)
         .then(() => {
@@ -96,7 +97,10 @@ describe('Search Results', () => {
         })
         .catch((error: any) => {
           if (error.name === 'NoSuchElementError') {
-            console.log('Must have the <stache> tag and a pageTitle on page to scrape content.');
+            console.log(
+              'Must have the <stache> tag and a pageTitle on page '
+              + file + ' to scrape content.'
+            );
             return pageContent;
           } else {
             throw new Error(error);
@@ -108,7 +112,7 @@ describe('Search Results', () => {
       return scrapePageContent(file);
     }))
       .then(pageContents => {
-        let searchDirPath = path.join(
+      let searchDirPath = path.join(
           __dirname,
           '..',
           'src',
@@ -116,22 +120,22 @@ describe('Search Results', () => {
           'search'
         );
 
-        content['contents'] = pageContents;
+        content = pageContents;
 
         if (!fs.existsSync(searchDirPath)) {
-          fs.mkdirSync(searchDirPath);
-        }
+      fs.mkdirSync(searchDirPath);
+    }
         return writeSearchFile(searchDirPath);
       })
       .then(() => done())
       .catch((error: any) => {
-        console.log('ERROR', error);
+      console.log('ERROR', error);
         expect(error).toBeNull();
         done();
       });
   });
 });
-`
+`;
 
 function addSearchSpecToProject(argv, config) {
     if (config.appSettings.search) {
