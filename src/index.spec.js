@@ -8,7 +8,7 @@ describe('Index', () => {
     beforeAll(() => {
         mock('path', {
             join: function () {
-                return './src/helpers/mock-config.json';
+                return './src/fixtures/mock-config.json';
             }
         });
     });
