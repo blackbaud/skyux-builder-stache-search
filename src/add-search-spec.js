@@ -58,7 +58,10 @@ describe('Search Results', () => {
       siteName = packageFile.name;
     }
     let url = config.skyux.host.url;
-    let content: any[] = [];
+    let content: any = {
+      siteName: siteName,
+      stachePageSearchData: []
+    };
 
     function writeSearchFile(searchDirPath: string) {
       return new Promise((resolve, reject) => {
@@ -112,7 +115,7 @@ describe('Search Results', () => {
       return scrapePageContent(file);
     }))
       .then(pageContents => {
-      let searchDirPath = path.join(
+        let searchDirPath = path.join(
           __dirname,
           '..',
           'src',
@@ -120,16 +123,16 @@ describe('Search Results', () => {
           'search'
         );
 
-        content = pageContents;
+        content.stachePageSearchData = pageContents;
 
         if (!fs.existsSync(searchDirPath)) {
-      fs.mkdirSync(searchDirPath);
-    }
+          fs.mkdirSync(searchDirPath);
+        }
         return writeSearchFile(searchDirPath);
       })
       .then(() => done())
       .catch((error: any) => {
-      console.log('ERROR', error);
+        console.log('ERROR', error);
         expect(error).toBeNull();
         done();
       });
