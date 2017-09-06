@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 
 function removeSearchSpecFromProject(argv, config) {
-    if (config.appSettings.search) {
+    if (config.appSettings.stache.search) {
         try {
             let filePath = path.join(process.cwd(), 'e2e', 'stache-search.e2e-spec.ts');
             if (fs.existsSync(filePath)) {

@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 
 function removeSearchJsonFileFromProject(argv, config) {
-    if (config.appSettings.search) {
+    if (config.appSettings.stache.search) {
         try {
             let filePath = path.join(process.cwd(), 'src', 'stache', 'search', 'search.json');
             if (fs.existsSync(filePath)) {

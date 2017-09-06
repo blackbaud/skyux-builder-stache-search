@@ -141,7 +141,7 @@ describe('Search Results', () => {
 `;
 
 function addSearchSpecToProject(argv, config) {
-    if (config.appSettings.search) {
+    if (config.appSettings.stache.search) {
         try {
             let filePath = path.join(process.cwd(), 'e2e');
             if (!fs.existsSync(filePath)) {

@@ -7,7 +7,9 @@ describe('Add Search Spec', () => {
     let addSearchSpec;
     const config = {
         appSettings: {
-            search: false
+            stache: {
+                search: false
+            }
         }
     };
     const filePath = './e2e/stache-search.e2e-spec.ts';
@@ -46,7 +48,7 @@ describe('Add Search Spec', () => {
     });
 
     it('should add the file if search is set to true', () => {
-        config.appSettings.search = true;
+        config.appSettings.stache.search = true;
         spyOn(console, 'log');
         addSearchSpec([], config);
         expect(console.log).toHaveBeenCalledWith('File exists');
@@ -54,7 +56,7 @@ describe('Add Search Spec', () => {
     });
 
     it('should create the e2e directory if it does not exist', () => {
-        config.appSettings.search = true;
+        config.appSettings.stache.search = true;
         mock('fs', {
             existsSync: function () {
                 return false;
@@ -80,7 +82,7 @@ describe('Add Search Spec', () => {
             }
         });
         addSearchSpec = mock.reRequire('./add-search-spec');
-        config.appSettings.search = true;
+        config.appSettings.stache.search = true;
         let test = function () {
             return addSearchSpec([], config);
         }

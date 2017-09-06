@@ -6,7 +6,9 @@ describe('Publish Search', () => {
     let publishSearch;
     const config = {
         appSettings: {
-            search: true
+            stache: {
+                search: false
+            }
         }
     };
 
@@ -41,11 +43,11 @@ describe('Publish Search', () => {
         process.env.searchEndpoint = "https://localhost:5000/publisher";
         process.env.token = "thisisatoken";
         publishSearch = mock.reRequire('./publish-search');
-        config.appSettings.search = true;
+        config.appSettings.stache.search = true;
     });
 
     it('should exit if search is false', () => {
-        config.appSettings.search = false;
+        config.appSettings.stache.search = false;
         spyOn(process, 'exit');
         publishSearch([], config);
         expect(process.exit).toHaveBeenCalledWith(0);
