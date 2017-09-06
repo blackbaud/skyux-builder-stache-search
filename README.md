@@ -3,7 +3,7 @@
 [![npm](https://img.shields.io/npm/v/@blackbaud/skyux-builder-stache-search.svg)](https://www.npmjs.com/package/@blackbaud/skyux-builder-stache-search)
 [![status](https://travis-ci.org/blackbaud/skyux-builder-stache-search.svg?branch=master)](https://travis-ci.org/blackbaud/skyux-builder-stache-search)
 
-These commands create the assets required to scrape a Stache SKYUX SPA and publish the resulting JSON blob to an Azure CosmosDB.
+These commands create the assets required to scrape a Stache SKYUX SPA and publish the resulting JSON blob to an Azure Search Service Index.
 
 ## Installation
 
