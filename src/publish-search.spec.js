@@ -13,6 +13,10 @@ describe('Publish Search', () => {
     };
 
     beforeEach(() => {  
+        mock('./error-handler', function(error) {
+            console.log(error);
+        });
+
         mock('fs-extra', {
             existsSync: function (filePath) {
                 console.log(`${filePath} exists!`);
@@ -71,21 +75,18 @@ describe('Publish Search', () => {
     it('should error if an endpoint is not provided', () => {
         delete process.env.searchEndpoint;
         publishSearch = mock.reRequire('./publish-search');
-        let test = function () {
-            return publishSearch([], config);
-        };
-        expect(test).toThrowError('[ERROR]: An endpoint is required to publish stache search data!');
+        spyOn(console, 'log');
+        publishSearch([], config);
+        expect(console.log).toHaveBeenCalledWith(new Error('[ERROR]: An endpoint is required to publish stache search data!'));
     });
 
     it('should error if a token is not provided', () => {
         delete process.env.token;
         publishSearch = mock.reRequire('./publish-search');
+        spyOn(console, 'log');
+        publishSearch([], config);
 
-        let test = function () {
-            return publishSearch([], config);
-        };
-
-        expect(test).toThrowError('[ERROR]: A token is required to publish stache search data!');
+        expect(console.log).toHaveBeenCalledWith(new Error('[ERROR]: A token is required to publish stache search data!'));
     });
 
     it('should post the json file to the database', () => {
@@ -102,10 +103,9 @@ describe('Publish Search', () => {
             callback({message: 'ERROR!'});
         });
         publishSearch = mock.reRequire('./publish-search');
-        let test = function () {
-            return publishSearch([], config);
-        };
-        expect(test).toThrowError(`[ERROR]: Unable to post search data! ERROR!`)
+        spyOn(console, 'log');
+        publishSearch([], config);
+        expect(console.log).toHaveBeenCalledWith(new Error('[ERROR]: Unable to post search data! ERROR!'));
     });
 
     it('should throw an error if unable to read search json file', () => {
@@ -119,10 +119,9 @@ describe('Publish Search', () => {
             }
         });
         publishSearch = mock.reRequire('./publish-search');
-        let test = function () {
-            return publishSearch([], config);
-        };
-        expect(test).toThrowError('[ERROR]: Unable to read search file at ./src/stache/search.json! It is broken!');
+        spyOn(console, 'log');
+        publishSearch([], config);
+        expect(console.log).toHaveBeenCalledWith(new Error('[ERROR]: Unable to read search file at ./src/stache/search.json! It is broken!'));
     });
 
 });

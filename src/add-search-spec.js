@@ -3,6 +3,8 @@
 const path = require('path');
 const fs = require('fs');
 
+const errorHandler = require('./error-handler');
+
 const template = `// Use browser to access other sites (that are running angular)
 import { browser, element, by } from 'protractor';
 
@@ -149,7 +151,7 @@ function addSearchSpecToProject(argv, config) {
             }
             fs.writeFileSync(path.join(filePath, 'stache-search.e2e-spec.ts'), template);
         } catch (error) {
-            throw new Error('[ERROR]: Unable to add stache search template to e2e directory.');
+            return errorHandler(new Error('[ERROR]: Unable to add stache search template to e2e directory.'), config);
         }
     }
 }

@@ -15,6 +15,10 @@ describe('Add Search Spec', () => {
     const filePath = './e2e/stache-search.e2e-spec.ts';
 
     beforeAll(() => {
+        mock('./error-handler', function (error) {
+            console.log(error);
+        });
+        
         mock('fs', {
             existsSync: function (filePath) {
                 if (filePath) {
@@ -75,7 +79,7 @@ describe('Add Search Spec', () => {
         expect(console.log).toHaveBeenCalledWith(`Added ${filePath} to directory!`);
     });
 
-    it('should throw an error if a problem occurs with adding the file', () => {
+    it('should call the errorHandler if a problem occurs with adding the file', () => {
         mock('path', {
             join: function () {
                 throw new Error('Test error');
@@ -83,9 +87,9 @@ describe('Add Search Spec', () => {
         });
         addSearchSpec = mock.reRequire('./add-search-spec');
         config.appSettings.stache.search = true;
-        let test = function () {
-            return addSearchSpec([], config);
-        }
-        expect(test).toThrowError('[ERROR]: Unable to add stache search template to e2e directory.');
+        spyOn(console, 'log');
+        addSearchSpec([], config);
+
+        expect(console.log).toHaveBeenCalledWith(new Error('[ERROR]: Unable to add stache search template to e2e directory.'));
     });
 });
