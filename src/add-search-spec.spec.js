@@ -51,6 +51,21 @@ describe('Add Search Spec', () => {
         expect(fs.existsSync).not.toHaveBeenCalled();
     });
 
+    it('should not add the file if search is undefined', () => {
+        spyOn(fs, 'existsSync');
+        addSearchSpec([], undefined);
+        addSearchSpec([], {});
+        addSearchSpec([], {
+            appSettings: {}
+        });
+        addSearchSpec([], {
+            appSettings: {
+                stache: {}
+            }
+        });
+        expect(fs.existsSync).not.toHaveBeenCalled();
+    });
+
     it('should add the file if search is set to true', () => {
         config.appSettings.stache.search = true;
         spyOn(console, 'log');

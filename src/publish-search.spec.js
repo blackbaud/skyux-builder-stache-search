@@ -57,6 +57,22 @@ describe('Publish Search', () => {
         expect(process.exit).toHaveBeenCalledWith(0);
     });
 
+    it('should exit if search is undefined', () => {
+        config.appSettings.stache.search = false;
+        spyOn(process, 'exit');
+        publishSearch([], undefined);
+        publishSearch([], {});
+        publishSearch([], {
+            appSettings: {}
+        });
+        publishSearch([], {
+            appSettings: {
+                stache: {}
+            }
+        });
+        expect(process.exit).toHaveBeenCalledWith(0);
+    });
+
     it('should exit if no search json file is found', () => {
         mock('fs-extra', {
             existsSync: function () {

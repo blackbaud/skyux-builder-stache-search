@@ -18,7 +18,7 @@ function getSearchData() {
 }
 
 function publishSearch(argv, config) {
-    if (!config.appSettings.stache.search || !fs.existsSync(filePath)) {
+    if (!(((config || {}).appSettings || {}).stache || {}).search || !fs.existsSync(filePath)) {
         process.exit(0);
         return;
     }

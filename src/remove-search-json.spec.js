@@ -46,6 +46,21 @@ describe('Remove Search JSON', () => {
         expect(fs.existsSync).not.toHaveBeenCalled();
     });
 
+    it('should not remove the file if search is undefined', () => {
+        spyOn(fs, 'existsSync');
+        removeSearchJSON([], undefined);
+        removeSearchJSON([], {});
+        removeSearchJSON([], {
+            appSettings: {}
+        });
+        removeSearchJSON([], {
+            appSettings: {
+                stache: {}
+            }
+        });
+        expect(fs.existsSync).not.toHaveBeenCalled();
+    });
+
     it('should remove the file if search is set to true and the file exists', () => {
         const filePath = './src/stache/search/search.json';
         config.appSettings.stache.search = true;

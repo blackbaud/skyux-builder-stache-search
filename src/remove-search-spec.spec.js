@@ -43,6 +43,21 @@ describe('Remove Search Spec', () => {
         expect(fs.existsSync).not.toHaveBeenCalled();
     });
 
+    it('should not remove the file if search is undefined', () => {
+        spyOn(fs, 'existsSync');
+        removeSearchSpec([], undefined);
+        removeSearchSpec([], {});
+        removeSearchSpec([], {
+            appSettings: {}
+        });
+        removeSearchSpec([], {
+            appSettings: {
+                stache: {}
+            }
+        });
+        expect(fs.existsSync).not.toHaveBeenCalled();
+    });
+
     it('should remove the file if search is set to true and the file exists', () => {
         const filePath = './e2e/stache-search.e2e-spec.ts';
         config.appSettings.stache.search = true;

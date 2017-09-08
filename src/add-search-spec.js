@@ -142,8 +142,9 @@ describe('Search Results', () => {
 });
 `;
 
+// http://web.archive.org/web/20161108071447/http://blog.osteele.com/posts/2007/12/cheap-monads/
 function addSearchSpecToProject(argv, config) {
-    if (config.appSettings.stache.search) {
+    if ((((config || {}).appSettings || {}).stache || {}).search) {
         try {
             let filePath = path.join(process.cwd(), 'e2e');
             if (!fs.existsSync(filePath)) {
