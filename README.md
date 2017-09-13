@@ -17,9 +17,9 @@ Add `search: true` to the `stache` object in your `skyuxconfig.json` file's `app
 
 ```
 appSettings: {
-    stache: {
-        search: true
-    }
+  stache: {
+    search: true
+  }
 }
 ```
 
