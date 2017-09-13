@@ -61,8 +61,8 @@ describe('Search Results', () => {
     }
     let url = config.skyux.host.url;
     let content: any = {
-      siteName: siteName,
-      stachePageSearchData: []
+      site_name: siteName,
+      stache_page_search_data: []
     };
 
     function writeSearchFile(searchDirPath: string) {
@@ -125,7 +125,7 @@ describe('Search Results', () => {
           'search'
         );
 
-        content.stachePageSearchData = pageContents;
+        content.stache_page_search_data = pageContents;
 
         if (!fs.existsSync(searchDirPath)) {
           fs.mkdirSync(searchDirPath);
