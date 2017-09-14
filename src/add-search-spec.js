@@ -1,6 +1,9 @@
+'use strict';
+
 const path = require('path');
 const fs = require('fs');
-const config = require(path.join(process.cwd(), 'skyuxconfig.json'));
+
+const errorHandler = require('./error-handler');
 
 const template = `// Use browser to access other sites (that are running angular)
 import { browser, element, by } from 'protractor';
@@ -11,9 +14,9 @@ import { SkyHostBrowser } from '@blackbaud/skyux-builder/runtime/testing/e2e';
 const fs = require('fs');
 const path = require('path');
 
-const walkSync = (dir, filePaths: string[] = []) => {
+const walkSync = (dir: string, filePaths: string[] = []) => {
   let files = fs.readdirSync(dir);
-  files.forEach(file => {
+  files.forEach((file: string) => {
     if (fs.statSync(path.join(dir, file)).isDirectory()) {
       filePaths = walkSync(path.join(dir, file), filePaths);
     } else {
@@ -26,7 +29,7 @@ const walkSync = (dir, filePaths: string[] = []) => {
 };
 
 describe('Search Results', () => {
-  let files;
+  let files: string[];
 
   function removeUnnecessaryElements() {
     Array.from(
@@ -51,31 +54,36 @@ describe('Search Results', () => {
 
   it('should generate search results', (done) => {
     let config = JSON.parse(browser.params.skyPagesConfig);
-    let appName = config.skyux.name;
-    if (!appName) {
+    let siteName = config.skyux.name;
+    if (!siteName) {
       const packageFile = require('../package.json');
-      appName = packageFile.name;
+      siteName = packageFile.name;
     }
     let url = config.skyux.host.url;
-    let content = {
-      name: appName,
-      url: url
+    let content: any = {
+      site_name: siteName,
+      stache_page_search_data: []
     };
 
-    function writeSearchFile(searchDirPath) {
+    function writeSearchFile(searchDirPath: string) {
       return new Promise((resolve, reject) => {
         fs.writeFile(
           path.join(searchDirPath, 'search.json'),
           JSON.stringify(content),
-          (err) => {
-            err ? reject(err) : resolve();
+          (error: any) => {
+            error ? reject(error) : resolve();
           }
         );
       });
     }
 
     function scrapePageContent(file: string) {
-      let pageContent = { path: file };
+      let pageContent: any = {
+        host: url,
+        site_name: siteName,
+        path: file
+      };
+
       return SkyHostBrowser
         .get(file)
         .then(() => {
@@ -84,17 +92,20 @@ describe('Search Results', () => {
         .then(() => {
             return element(by.css('.stache-wrapper')).getText();
         })
-        .then(text => {
+        .then((text: string) => {
           pageContent['text'] = text;
           return element(by.css('.stache-page-title')).getText();
         })
-        .then(text => {
+        .then((text: string) => {
           pageContent['title'] = text;
           return pageContent;
         })
-        .catch(error => {
+        .catch((error: any) => {
           if (error.name === 'NoSuchElementError') {
-            console.log('Must have the <stache> tag and a pageTitle on page to scrape content.');
+            console.log(
+              'Must have the <stache> tag and a pageTitle on page '
+              + file + ' to scrape content.'
+            );
             return pageContent;
           } else {
             throw new Error(error);
@@ -114,7 +125,7 @@ describe('Search Results', () => {
           'search'
         );
 
-        content['content'] = pageContents;
+        content.stache_page_search_data = pageContents;
 
         if (!fs.existsSync(searchDirPath)) {
           fs.mkdirSync(searchDirPath);
@@ -122,26 +133,30 @@ describe('Search Results', () => {
         return writeSearchFile(searchDirPath);
       })
       .then(() => done())
-      .catch(error => {
+      .catch((error: any) => {
         console.log('ERROR', error);
         expect(error).toBeNull();
         done();
       });
   });
 });
-`
+`;
 
-function addSearchSpecToProject() {
+function addSearchSpecToProject(argv, config) {
+  if (config &&
+    config.appSettings &&
+    config.appSettings.stache &&
+    config.appSettings.stache.search) {
     try {
-        if (!fs.existsSync('e2e')) {
-            fs.mkdirSync('e2e');
-        }
-        fs.writeFileSync(path.join('e2e', 'stache-search.e2e-spec.ts'), template);
+      let filePath = path.join(process.cwd(), 'e2e');
+      if (!fs.existsSync(filePath)) {
+        fs.mkdirSync(filePath);
+      }
+      fs.writeFileSync(path.join(filePath, 'stache-search.e2e-spec.ts'), template);
     } catch (error) {
-        throw new Error('[ERROR]: Unable to add stache search template to e2e directory.');
+      return errorHandler(new Error('[ERROR]: Unable to add stache search template to e2e directory.'), config);
     }
+  }
 }
 
-if (config.appSettings.search) {
-    addSearchSpecToProject();
-}
+module.exports = addSearchSpecToProject;
