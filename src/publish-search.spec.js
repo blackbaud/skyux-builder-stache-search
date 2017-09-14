@@ -1,6 +1,7 @@
 'use strict';
 
 const mock = require('mock-require');
+const fs = require('fs-extra');
 
 describe('Publish Search', () => {
   let publishSearch;
@@ -50,16 +51,16 @@ describe('Publish Search', () => {
     config.appSettings.stache.search = true;
   });
 
-  it('should exit if search is false', () => {
+  it('should do nothing if search is false', () => {
     config.appSettings.stache.search = false;
-    spyOn(process, 'exit');
+    spyOn(fs, 'existsSync');
     publishSearch([], config);
-    expect(process.exit).toHaveBeenCalledWith(0);
+    expect(fs.existsSync).not.toHaveBeenCalled();
   });
 
   it('should exit if search is undefined', () => {
     config.appSettings.stache.search = false;
-    spyOn(process, 'exit');
+    spyOn(fs, 'existsSync');
     publishSearch([], undefined);
     publishSearch([], {});
     publishSearch([], {
@@ -70,10 +71,10 @@ describe('Publish Search', () => {
         stache: {}
       }
     });
-    expect(process.exit).toHaveBeenCalledWith(0);
+    expect(fs.existsSync).not.toHaveBeenCalled();
   });
 
-  it('should exit if no search json file is found', () => {
+  it('should error if no search json file is found', () => {
     mock('fs-extra', {
       existsSync: function () {
         console.log('Does not exist!');
@@ -81,10 +82,9 @@ describe('Publish Search', () => {
       }
     });
     publishSearch = mock.reRequire('./publish-search');
-    spyOn(process, 'exit');
     spyOn(console, 'log');
     publishSearch([], config);
-    expect(process.exit).toHaveBeenCalledWith(0);
+    expect(console.log).toHaveBeenCalledWith(new Error('[ERROR]: Search json file does not exist!'));
     expect(console.log).toHaveBeenCalledWith('Does not exist!');
   });
 

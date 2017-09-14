@@ -1,6 +1,6 @@
 'use strict';
 
-const fs = require('fs');
+const fs = require('fs-extra');
 const mock = require('mock-require');
 
 describe('Remove Search Spec', () => {
@@ -14,7 +14,7 @@ describe('Remove Search Spec', () => {
   };
 
   beforeAll(() => {
-    mock('fs', {
+    mock('fs-extra', {
       existsSync: function(filePath) {
         if (filePath) {
           console.log('File exists');
@@ -68,7 +68,7 @@ describe('Remove Search Spec', () => {
   });
 
   it('should do nothing if no file exists', () => {
-    mock('fs', {
+    mock('fs-extra', {
       existsSync: function () {
         return false;
       },

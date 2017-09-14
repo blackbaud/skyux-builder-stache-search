@@ -18,9 +18,15 @@ function getSearchData() {
 }
 
 function publishSearch(argv, config) {
-  if (!(((config || {}).appSettings || {}).stache || {}).search || !fs.existsSync(filePath)) {
-    process.exit(0);
+  if (!(config &&
+    config.appSettings &&
+    config.appSettings.stache &&
+    config.appSettings.stache.search)) {
     return;
+  }
+
+  if (!fs.existsSync(filePath)) {
+    return errorHandler(new Error('[ERROR]: Search json file does not exist!'));
   }
 
   if (!endpoint) {

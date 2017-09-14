@@ -16,9 +16,9 @@ npm install --save-dev @blackbaud/skyux-builder-stache-search
 Add `search: true` to the `stache` object in your `skyuxconfig.json` file's `appSettings`:
 
 ```
-appSettings: {
-  stache: {
-    search: true
+"appSettings": {
+  "stache": {
+    "search": true
   }
 }
 ```

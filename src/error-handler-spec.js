@@ -14,13 +14,20 @@ describe('Error Handler', () => {
 
   it('should log the error', () => {
     spyOn(console, 'error');
-    errorHandler('Error!', 'Config');
+    let test = function () {
+      return errorHandler('Error!', 'Config');
+    };
+
+    expect(test).toThrow('Error!');
     expect(console.error).toHaveBeenCalledWith('Error!');
   });
 
   it('should call the remove-search-json and remove-search-spec functions', () => {
     spyOn(console, 'log');
-    errorHandler('Errors!', 'Config');
+    let test = function () {
+      return errorHandler('Errors!', 'Config');
+    };
+    expect(test).toThrow('Errors!');
     expect(console.log).toHaveBeenCalledWith('Remove Search Json Called null Config');
     expect(console.log).toHaveBeenCalledWith('Remove Search Spec Called null Config');
   });

@@ -1,10 +1,13 @@
 'use strict';
 
-const fs = require('fs');
+const fs = require('fs-extra');
 const path = require('path');
 
 function removeSearchJsonFileFromProject(argv, config) {
-  if ((((config || {}).appSettings || {}).stache || {}).search) {
+  if (config &&
+    config.appSettings &&
+    config.appSettings.stache &&
+    config.appSettings.stache.search) {
     try {
       let filePath = path.join(process.cwd(), 'src', 'stache', 'search', 'search.json');
       if (fs.existsSync(filePath)) {
