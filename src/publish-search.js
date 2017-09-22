@@ -19,9 +19,10 @@ function getSearchData() {
 
 function publishSearch(argv, config) {
   if (!(config &&
-    config.appSettings &&
-    config.appSettings.stache &&
-    config.appSettings.stache.search)) {
+        config.appSettings &&
+        config.appSettings.stache &&
+        config.appSettings.stache.searchConfig &&
+        config.appSettings.stache.searchConfig.allowSiteToBeSearched)) {
     return;
   }
 

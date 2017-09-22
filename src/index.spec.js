@@ -51,6 +51,18 @@ describe('Index', () => {
     });
   });
 
+  it('should return false for unknown command', () => {
+    const cmd = 'junk-command-that-does-not-exist';
+    const lib = require('../index');
+    expect(lib.runCommand(cmd, {})).toBe(false);
+  });
+
+  it('should return true for known command', () => {
+    const cmd = 'publish-search';
+    const lib = require('../index');
+    expect(lib.runCommand(cmd, {})).toBe(true);
+  });
+
   afterAll(() => {
     mock.stopAll();
   });

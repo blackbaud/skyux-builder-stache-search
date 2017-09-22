@@ -8,7 +8,9 @@ describe('Remove Search Spec', () => {
   const config = {
     appSettings: {
       stache: {
-        search: false
+        searchConfig: {
+          allowSiteToBeSearched: false
+        }
       }
     }
   };
@@ -60,7 +62,7 @@ describe('Remove Search Spec', () => {
 
   it('should remove the file if search is set to true and the file exists', () => {
     const filePath = './e2e/stache-search.e2e-spec.ts';
-    config.appSettings.stache.search = true;
+    config.appSettings.stache.searchConfig.allowSiteToBeSearched = true;
     spyOn(console, 'log');
     removeSearchSpec([], config);
     expect(console.log).toHaveBeenCalledWith(`File deleted: ${filePath}`);
@@ -77,7 +79,7 @@ describe('Remove Search Spec', () => {
       }
     });
     spyOn(console, 'log');
-    config.appSettings.stache.search = true;
+    config.appSettings.stache.searchConfig.allowSiteToBeSearched = true;
     removeSearchSpec = mock.reRequire('./remove-search-spec');
     removeSearchSpec([], config);
     expect(console.log).not.toHaveBeenCalledWith('I should not fire!');
@@ -90,7 +92,7 @@ describe('Remove Search Spec', () => {
       }
     });
     removeSearchSpec = mock.reRequire('./remove-search-spec');
-    config.appSettings.stache.search = true;
+    config.appSettings.stache.searchConfig.allowSiteToBeSearched = true;
     let test = function () {
       return removeSearchSpec([], config);
     }

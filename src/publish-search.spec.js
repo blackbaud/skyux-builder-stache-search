@@ -8,7 +8,9 @@ describe('Publish Search', () => {
   const config = {
     appSettings: {
       stache: {
-        search: false
+        searchConfig: {
+          allowSiteToBeSearched: false
+        }
       }
     }
   };
@@ -48,18 +50,18 @@ describe('Publish Search', () => {
     process.env.searchEndpoint = "https://localhost:5000/publisher";
     process.env.token = "thisisatoken";
     publishSearch = mock.reRequire('./publish-search');
-    config.appSettings.stache.search = true;
+    config.appSettings.stache.searchConfig.allowSiteToBeSearched = true;
   });
 
   it('should do nothing if search is false', () => {
-    config.appSettings.stache.search = false;
+    config.appSettings.stache.searchConfig.allowSiteToBeSearched = false;
     spyOn(fs, 'existsSync');
     publishSearch([], config);
     expect(fs.existsSync).not.toHaveBeenCalled();
   });
 
   it('should exit if search is undefined', () => {
-    config.appSettings.stache.search = false;
+    config.appSettings.stache.searchConfig.allowSiteToBeSearched = false;
     spyOn(fs, 'existsSync');
     publishSearch([], undefined);
     publishSearch([], {});
@@ -69,6 +71,13 @@ describe('Publish Search', () => {
     publishSearch([], {
       appSettings: {
         stache: {}
+      }
+    });
+    publishSearch([], {
+      appSettings: {
+        stache: {
+          searchConfig: {}
+        }
       }
     });
     expect(fs.existsSync).not.toHaveBeenCalled();

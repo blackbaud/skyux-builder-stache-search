@@ -8,7 +8,9 @@ describe('Remove Search JSON', () => {
   const config = {
     appSettings: {
       stache: {
-        search: false
+        searchConfig: {
+          allowSiteToBeSearched: false
+        }
       }
     }
   };
@@ -63,7 +65,7 @@ describe('Remove Search JSON', () => {
 
   it('should remove the file if search is set to true and the file exists', () => {
     const filePath = './src/stache/search/search.json';
-    config.appSettings.stache.search = true;
+    config.appSettings.stache.searchConfig.allowSiteToBeSearched = true;
     spyOn(console, 'log');
     removeSearchJSON([], config);
     expect(console.log).toHaveBeenCalledWith(`Directory deleted: ${filePath.slice(0, -11)}`);
@@ -81,7 +83,7 @@ describe('Remove Search JSON', () => {
       }
     });
     spyOn(console, 'log');
-    config.appSettings.stache.search = true;
+    config.appSettings.stache.searchConfig.allowSiteToBeSearched = true;
     removeSearchJSON = mock.reRequire('./remove-search-json');
     removeSearchJSON([], config);
     expect(console.log).not.toHaveBeenCalledWith('I should not fire!');
@@ -94,7 +96,7 @@ describe('Remove Search JSON', () => {
       }
     });
     removeSearchJSON = mock.reRequire('./remove-search-json');
-    config.appSettings.stache.search = true;
+    config.appSettings.stache.searchConfig.allowSiteToBeSearched = true;
     let test = function () {
       return removeSearchJSON([], config);
     }
