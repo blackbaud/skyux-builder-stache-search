@@ -8,7 +8,7 @@ function removeSearchJsonFileFromProject(argv, config) {
       config.appSettings &&
       config.appSettings.stache &&
       config.appSettings.stache.searchConfig &&
-      config.appSettings.stache.searchConfig.allowSiteToBeSearched) {
+      config.appSettings.stache.searchConfig.allowSiteToBeSearched !== false) {
     try {
       let filePath = path.join(process.cwd(), 'src', 'stache', 'search', 'search.json');
       if (fs.existsSync(filePath)) {

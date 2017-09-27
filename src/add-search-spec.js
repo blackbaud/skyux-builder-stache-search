@@ -54,12 +54,19 @@ describe('Search Results', () => {
 
   it('should generate search results', (done) => {
     let config = JSON.parse(browser.params.skyPagesConfig);
+    let doesSearchConfigExist = (
+      config.skyux &&
+      config.skyux.appSettings &&
+      config.skyux.appSettings.stache &&
+      config.skyux.appSettings.stache.searchConfig
+    )
     let siteName = config.skyux.name;
     if (!siteName) {
       const packageFile = require('../package.json');
       siteName = packageFile.name;
     }
     let url = config.skyux.host.url;
+    let isInternal = doesSearchConfigExist ? config.skyux.appSettings.stache.searchConfig.is_internal : true;
     let content: any = {
       site_name: siteName,
       stache_page_search_data: []
@@ -81,7 +88,8 @@ describe('Search Results', () => {
       let pageContent: any = {
         host: url,
         site_name: siteName,
-        path: file
+        path: file,
+        is_internal: isInternal
       };
 
       return SkyHostBrowser
@@ -147,7 +155,7 @@ function addSearchSpecToProject(argv, config) {
       config.appSettings &&
       config.appSettings.stache &&
       config.appSettings.stache.searchConfig &&
-      config.appSettings.stache.searchConfig.allowSiteToBeSearched) {
+      config.appSettings.stache.searchConfig.allowSiteToBeSearched !== false) {
     try {
       let filePath = path.join(process.cwd(), 'e2e');
       if (!fs.existsSync(filePath)) {

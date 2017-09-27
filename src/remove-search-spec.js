@@ -8,7 +8,7 @@ function removeSearchSpecFromProject(argv, config) {
       config.appSettings &&
       config.appSettings.stache &&
       config.appSettings.stache.searchConfig &&
-      config.appSettings.stache.searchConfig.allowSiteToBeSearched) {
+      config.appSettings.stache.searchConfig.allowSiteToBeSearched !== false) {
     try {
       let filePath = path.join(process.cwd(), 'e2e', 'stache-search.e2e-spec.ts');
       if (fs.existsSync(filePath)) {
