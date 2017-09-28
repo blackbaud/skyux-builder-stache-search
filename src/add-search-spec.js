@@ -1,7 +1,8 @@
 'use strict';
 
 const path = require('path');
-const fs = require('fs');
+const fs = require('fs-extra');
+const utils = require('./utils/shared');
 
 const errorHandler = require('./error-handler');
 
@@ -151,20 +152,20 @@ describe('Search Results', () => {
 `;
 
 function addSearchSpecToProject(argv, config) {
-  if (config &&
-      config.appSettings &&
-      config.appSettings.stache &&
-      config.appSettings.stache.searchConfig &&
-      config.appSettings.stache.searchConfig.allowSiteToBeSearched !== false) {
-    try {
-      let filePath = path.join(process.cwd(), 'e2e');
-      if (!fs.existsSync(filePath)) {
-        fs.mkdirSync(filePath);
-      }
-      fs.writeFileSync(path.join(filePath, 'stache-search.e2e-spec.ts'), template);
-    } catch (error) {
-      return errorHandler(new Error('[ERROR]: Unable to add stache search template to e2e directory.'), config);
+  let doesSearchConfigExist = utils.checkConfig(config, 'allowSiteToBeSearched');
+  if (
+    doesSearchConfigExist && 
+    config.appSettings.stache.searchConfig.allowSiteToBeSearched === false 
+  ) { return; }
+
+  try {
+    let filePath = path.join(process.cwd(), 'e2e');
+    if (!fs.existsSync(filePath)) {
+      fs.mkdirSync(filePath);
     }
+    fs.writeFileSync(path.join(filePath, 'stache-search.e2e-spec.ts'), template);
+  } catch (error) {
+    return errorHandler(new Error('[ERROR]: Unable to add stache search template to e2e directory.'), config);
   }
 }
 

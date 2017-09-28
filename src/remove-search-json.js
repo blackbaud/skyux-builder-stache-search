@@ -2,22 +2,23 @@
 
 const fs = require('fs-extra');
 const path = require('path');
+const utils = require('./utils/shared');
 
 function removeSearchJsonFileFromProject(argv, config) {
-  if (config &&
-      config.appSettings &&
-      config.appSettings.stache &&
-      config.appSettings.stache.searchConfig &&
-      config.appSettings.stache.searchConfig.allowSiteToBeSearched !== false) {
-    try {
-      let filePath = path.join(process.cwd(), 'src', 'stache', 'search', 'search.json');
-      if (fs.existsSync(filePath)) {
-        fs.unlinkSync(filePath);
-        fs.rmdirSync(filePath.slice(0, -11));
-      }
-    } catch (error) {
-      throw new Error('[ERROR]: Unable to remove stache search directory.');
+  let doesSearchConfigExist = utils.checkConfig(config, 'allowSiteToBeSearched');
+  if (
+    doesSearchConfigExist &&
+    config.appSettings.stache.searchConfig.allowSiteToBeSearched === false
+  ) { return; }
+  
+  try {
+    let filePath = path.join(process.cwd(), 'src', 'stache', 'search', 'search.json');
+    if (fs.existsSync(filePath)) {
+      fs.unlinkSync(filePath);
+      fs.rmdirSync(filePath.slice(0, -11));
     }
+  } catch (error) {
+    throw new Error('[ERROR]: Unable to remove stache search directory.');
   }
 }
 

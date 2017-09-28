@@ -1,7 +1,7 @@
 'use strict';
 
 const mock = require('mock-require');
-const fs = require('fs');
+const fs = require('fs-extra');
 
 describe('Add Search Spec', () => {
   let addSearchSpec;
@@ -21,7 +21,7 @@ describe('Add Search Spec', () => {
       console.log(error);
     });
         
-    mock('fs', {
+    mock('fs-extra', {
       existsSync: function (filePath) {
         if (filePath) {
           console.log('File exists');
@@ -85,7 +85,7 @@ describe('Add Search Spec', () => {
 
   it('should create the e2e directory if it does not exist', () => {
     config.appSettings.stache.searchConfig.allowSiteToBeSearched = true;
-    mock('fs', {
+    mock('fs-extra', {
       existsSync: function () {
         return false;
       },

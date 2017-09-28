@@ -7,6 +7,7 @@ const endpoint = process.env.searchEndpoint;
 const token = process.env.token;
 const filePath = path.join(process.cwd(), 'src', 'stache', 'search', 'search.json');
 const errorHandler = require('./error-handler');
+const utils = require('./utils/shared');
 
 function getSearchData() {
   try {
@@ -18,13 +19,11 @@ function getSearchData() {
 }
 
 function publishSearch(argv, config) {
-  if (config &&
-      config.appSettings &&
-      config.appSettings.stache &&
-      config.appSettings.stache.searchConfig &&
-      config.appSettings.stache.searchConfig.allowSiteToBeSearched === false) {
-    return;
-  }
+  let doesSearchConfigExist = utils.checkConfig(config, 'allowSiteToBeSearched');
+  if (
+    doesSearchConfigExist &&
+    config.appSettings.stache.searchConfig.allowSiteToBeSearched === false
+  ) { return; }
 
   if (!fs.existsSync(filePath)) {
     return errorHandler(new Error('[ERROR]: Search json file does not exist!'));
