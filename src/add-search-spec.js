@@ -54,13 +54,13 @@ describe('Search Results', () => {
   });
 
   it('should generate search results', (done) => {
-    let config = JSON.parse(browser.params.skyPagesConfig);
+    let config = browser.params.skyPagesConfig;
     let doesSearchConfigExist = (
       config.skyux &&
       config.skyux.appSettings &&
       config.skyux.appSettings.stache &&
       config.skyux.appSettings.stache.searchConfig
-    )
+    );
     let siteName = config.skyux.name;
     if (!siteName) {
       const packageFile = require('../package.json');
