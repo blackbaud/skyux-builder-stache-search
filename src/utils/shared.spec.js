@@ -11,23 +11,18 @@ describe('Utils', () => {
     }
   };
 
-  it('should return true if the config exists', () => {
-    let result = utils.checkConfig(config);
+  it('should return the value if the key in the config exists', () => {
+    let result = utils.readConfig(config, 'allowSiteToBeSearched');
     expect(result).toBe(true);
   });
 
-  it('should return true if the key in the config exists', () => {
-    let result = utils.checkConfig(config, 'allowSiteToBeSearched');
-    expect(result).toBe(true);
+  it('should return undefined if no key exists', () => {
+    let result = utils.readConfig(config, 'Nope');
+    expect(result).toBe(undefined);
   });
 
-  it('should return false if no key exists', () => {
-    let result = utils.checkConfig(config, 'Nope');
-    expect(result).toBe(false);
-  });
-
-  it('should return false if config does not exist', () => {
-    let result = utils.checkConfig(undefined);
-    expect(result).toBe(false);
+  it('should return undefined if config does not exist', () => {
+    let result = utils.readConfig(undefined);
+    expect(result).toBe(undefined);
   });
 });

@@ -9,8 +9,14 @@ module.exports = {
       case 'add-search-spec':
         require('./src/add-search-spec')(argv, config);
         break;
+      case 'add-e2e-config':
+        require('./src/add-e2e-config')(argv, config);
+        break;
       case 'publish-search':
         require('./src/publish-search')(argv, config);
+        break;
+      case 'remove-e2e-config':
+        require('./src/remove-e2e-config')(argv, config);
         break;
       case 'remove-search-json':
         require('./src/remove-search-json')(argv, config);

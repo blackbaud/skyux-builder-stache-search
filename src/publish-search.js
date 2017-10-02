@@ -5,8 +5,10 @@ const fs = require('fs-extra');
 const request = require('request');
 const path = require('path');
 const audienceId = process.env.audienceId;
+const clientUserName = process.env.clientUserName;
+const clientKey = process.env.clientKey;
 const endpoint = process.env.endpoint;
-const filePath = path.join(process.cwd(), 'src', 'stache', 'search', 'search.json');
+const filePath = path.resolve(process.cwd(), 'src/stache/search/search.json');
 const errorHandler = require('./error-handler');
 const utils = require('./utils/shared');
 
@@ -20,11 +22,7 @@ function getSearchData() {
 }
 
 function publishSearch(argv, config) {
-  let doesSearchConfigExist = utils.checkConfig(config, 'allowSiteToBeSearched');
-  if (
-    doesSearchConfigExist &&
-    config.appSettings.stache.searchConfig.allowSiteToBeSearched === false
-  ) { return; }
+  if (utils.readConfig(config, 'allowSiteToBeSearched') === false) { return; }
 
   if (!fs.existsSync(filePath)) {
     return errorHandler(new Error('[ERROR]: Search json file does not exist!'), config);
@@ -34,11 +32,21 @@ function publishSearch(argv, config) {
     return errorHandler(new Error('[ERROR]: An endpoint is required to publish stache search data!'), config);
   }
 
+  if (!audienceId) {
+    return errorHandler(new Error('[ERROR]: An audienceId is required to publish stache search data!'), config);
+  }
+
+  if (!clientUserName || !clientKey) {
+    return errorHandler(new Error('[ERROR]: Client User Name and Client Key are required to publish stache search data!'), config);
+  }
+
+  let encodedCredentials = btoa(`${clientUserName}:${clientKey}`);
+
   const sasOptions = {
     method: 'POST',
     uri: `https://service-authorization.sky.blackbaud.com/oauth2/token?grant_type=client_credentials&audience_id=${encodeURIComponent(audienceId)}`,
     headers: {
-      'Authorization': `Basic ${btoa('s21astc00paas\\Blackbaud.Stache.SearchService.NodeClient:8lANXg4E)$b*qE@dH2wzh|MsnPti]Unj')}`
+      'Authorization': `Basic ${encodedCredentials}`
     }
   };
 

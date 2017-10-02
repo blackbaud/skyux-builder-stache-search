@@ -152,11 +152,7 @@ describe('Search Results', () => {
 `;
 
 function addSearchSpecToProject(argv, config) {
-  let doesSearchConfigExist = utils.checkConfig(config, 'allowSiteToBeSearched');
-  if (
-    doesSearchConfigExist && 
-    config.appSettings.stache.searchConfig.allowSiteToBeSearched === false 
-  ) { return; }
+  if (utils.readConfig(config, 'allowSiteToBeSearched') === false) { return; }
 
   try {
     let filePath = path.join(process.cwd(), 'e2e');

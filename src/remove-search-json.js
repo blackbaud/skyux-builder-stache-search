@@ -5,19 +5,16 @@ const path = require('path');
 const utils = require('./utils/shared');
 
 function removeSearchJsonFileFromProject(argv, config) {
-  let doesSearchConfigExist = utils.checkConfig(config, 'allowSiteToBeSearched');
-  if (
-    doesSearchConfigExist &&
-    config.appSettings.stache.searchConfig.allowSiteToBeSearched === false
-  ) { return; }
-  
+  if (utils.readConfig(config, 'allowSiteToBeSearched') === false) { return; }
+
   try {
-    let filePath = path.join(process.cwd(), 'src', 'stache', 'search', 'search.json');
+    const filePath = path.resolve(process.cwd(), 'src/stache/search/search.json');
     if (fs.existsSync(filePath)) {
       fs.unlinkSync(filePath);
-      fs.rmdirSync(filePath.slice(0, -11));
+      fs.rmdirSync(path.dirname(filePath));
     }
   } catch (error) {
+    console.log('error', error);
     throw new Error('[ERROR]: Unable to remove stache search directory.');
   }
 }

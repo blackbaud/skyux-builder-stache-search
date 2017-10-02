@@ -32,7 +32,10 @@ describe('Remove Search JSON', () => {
     });
 
     mock('path', {
-      join: function () {
+      dirname: function () {
+        return './src/stache/search/';
+      },
+      resolve: function () {
         return './src/stache/search/search.json';
       }
     });
@@ -48,19 +51,13 @@ describe('Remove Search JSON', () => {
     expect(fs.existsSync).not.toHaveBeenCalled();
   });
 
-  it('should not remove the file if search is undefined', () => {
-    spyOn(fs, 'existsSync');
+  it('should remove the file by default if search is undefined', () => {
+    const filePath = './src/stache/search/search.json';
+    spyOn(console, 'log');
     removeSearchJSON([], undefined);
-    removeSearchJSON([], {});
-    removeSearchJSON([], {
-      appSettings: {}
-    });
-    removeSearchJSON([], {
-      appSettings: {
-        stache: {}
-      }
-    });
-    expect(fs.existsSync).not.toHaveBeenCalled();
+    expect(console.log).toHaveBeenCalledWith(`Directory deleted: ${filePath.slice(0, -11)}`);
+    expect(console.log).toHaveBeenCalledWith(`File deleted: ${filePath}`);
+    expect(console.log).toHaveBeenCalledWith('File exists');
   });
 
   it('should remove the file if search is set to true and the file exists', () => {
@@ -91,7 +88,7 @@ describe('Remove Search JSON', () => {
 
   it('should throw an error if a problem occurs with deleting the file', () => {
     mock('path', {
-      join: function () {
+      resolve: function () {
         throw new Error('Test error');
       }
     });

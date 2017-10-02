@@ -3,8 +3,8 @@
 const fs = require('fs-extra');
 const mock = require('mock-require');
 
-describe('Remove Search Spec', () => {
-  let removeSearchSpec;
+describe('Remove e2e config', () => {
+  let removeE2EConfig;
   const config = {
     appSettings: {
       stache: {
@@ -17,47 +17,48 @@ describe('Remove Search Spec', () => {
 
   beforeAll(() => {
     mock('fs-extra', {
-      existsSync: function(filePath) {
+      existsSync: function (filePath) {
         if (filePath) {
           console.log('File exists');
           return true;
         }
       },
-      unlinkSync: function(filePath) {
+      unlinkSync: function (filePath) {
         console.log(`File deleted: ${filePath}`);
       }
     });
 
     mock('path', {
-      resolve: function() {
-        return './e2e/stache-search.e2e-spec.ts';
+      resolve: function () {
+        return './skyuxconfig.e2e.json';
       }
     });
   });
 
   beforeEach(() => {
-    removeSearchSpec = mock.reRequire('./remove-search-spec');
+    removeE2EConfig = mock.reRequire('./remove-e2e-config');
   });
 
   it('should not remove the file if search is false', () => {
     spyOn(fs, 'existsSync');
-    removeSearchSpec([], config);
+    removeE2EConfig([], config);
     expect(fs.existsSync).not.toHaveBeenCalled();
   });
 
   it('should remove the file by default if search is undefined', () => {
-    const filePath = './e2e/stache-search.e2e-spec.ts';
+    const filePath = './skyuxconfig.e2e.json';
     spyOn(console, 'log');
-    removeSearchSpec([], undefined);
+    removeE2EConfig([], undefined);
+
     expect(console.log).toHaveBeenCalledWith(`File deleted: ${filePath}`);
     expect(console.log).toHaveBeenCalledWith('File exists');
   });
 
-  it('should remove the file if search is set to true and the file exists', () => {
-    const filePath = './e2e/stache-search.e2e-spec.ts';
-    config.appSettings.stache.searchConfig.allowSiteToBeSearched = true;
+  it('should remove the file if it exists', () => {
+    const filePath = './skyuxconfig.e2e.json';
     spyOn(console, 'log');
-    removeSearchSpec([], config);
+    removeE2EConfig([], undefined);
+
     expect(console.log).toHaveBeenCalledWith(`File deleted: ${filePath}`);
     expect(console.log).toHaveBeenCalledWith('File exists');
   });
@@ -72,24 +73,22 @@ describe('Remove Search Spec', () => {
       }
     });
     spyOn(console, 'log');
-    config.appSettings.stache.searchConfig.allowSiteToBeSearched = true;
-    removeSearchSpec = mock.reRequire('./remove-search-spec');
-    removeSearchSpec([], config);
+    removeE2EConfig = mock.reRequire('./remove-e2e-config');
+    removeE2EConfig([], undefined);
     expect(console.log).not.toHaveBeenCalledWith('I should not fire!');
   });
 
   it('should throw an error if a problem occurs with deleting the file', () => {
     mock('path', {
-      join: function() {
+      resolve: function () {
         throw new Error('Test error');
       }
     });
-    removeSearchSpec = mock.reRequire('./remove-search-spec');
-    config.appSettings.stache.searchConfig.allowSiteToBeSearched = true;
+    removeE2EConfig = mock.reRequire('./remove-e2e-config');
     let test = function () {
-      return removeSearchSpec([], config);
+      return removeE2EConfig([], undefined);
     }
-    expect(test).toThrowError('[ERROR]: Unable to remove stache search template from e2e directory.');
+    expect(test).toThrowError('[ERROR]: Unable to remove skyuxconfig.e2e.json.');
   });
 
 });

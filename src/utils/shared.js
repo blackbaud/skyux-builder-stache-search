@@ -1,18 +1,15 @@
-  function checkConfig(config, key) {
+  function readConfig(config, key) {
     if (
       config &&
       config.appSettings &&
       config.appSettings.stache &&
       config.appSettings.stache.searchConfig
     ) {
-      if (key) {
-        return config.appSettings.stache.searchConfig[key] !== undefined ? true : false;
-      }
-      return true;
+        return config.appSettings.stache.searchConfig[key];
     }
-    return false;
+    return undefined;
 }
 
 module.exports = {
-  checkConfig
+  readConfig
 };
