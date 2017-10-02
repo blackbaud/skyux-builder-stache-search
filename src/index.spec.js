@@ -28,9 +28,17 @@ describe('Index', () => {
         cmd: 'add-search-spec',
         lib: 'add-search-spec'
       },
+      'add-e2e-config': {
+        cmd: 'add-e2e-config',
+        lib: 'add-e2e-config'
+      },
       'publish-search': {
         cmd: 'publish-search',
         lib: 'publish-search'
+      },
+      'remove-e2e-config': {
+        cmd: 'remove-e2e-config',
+        lib: 'remove-e2e-config'
       },
       'remove-search-json': {
         cmd: 'remove-search-json',
