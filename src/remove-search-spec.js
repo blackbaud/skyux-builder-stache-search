@@ -5,7 +5,9 @@ const path = require('path');
 const utils = require('./utils/shared');
 
 function removeSearchSpecFromProject(argv, config) {
-  if (utils.readConfig(config, 'allowSiteToBeSearched') === false) { return; }
+  if (utils.readConfig(config, 'allowSiteToBeSearched') === false) {
+    return; 
+  }
 
   try {
     const filePath = path.resolve(process.cwd(), 'e2e/stache-search.e2e-spec.ts');

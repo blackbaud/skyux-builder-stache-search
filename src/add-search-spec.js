@@ -152,7 +152,9 @@ describe('Search Results', () => {
 `;
 
 function addSearchSpecToProject(argv, config) {
-  if (utils.readConfig(config, 'allowSiteToBeSearched') === false) { return; }
+  if (utils.readConfig(config, 'allowSiteToBeSearched') === false) {
+    return; 
+  }
 
   try {
     let filePath = path.join(process.cwd(), 'e2e');

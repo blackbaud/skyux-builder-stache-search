@@ -7,7 +7,9 @@ const utils = require('./utils/shared');
 const errorHandler = require('./error-handler');
 
 function addE2EConfig(argv, config) {
-  if (utils.readConfig(config, 'allowSiteToBeSearched') === false) { return; }
+  if (utils.readConfig(config, 'allowSiteToBeSearched') === false) {
+    return; 
+  }
 
   let e2eConfig = {
     auth: false,

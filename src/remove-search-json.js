@@ -5,7 +5,9 @@ const path = require('path');
 const utils = require('./utils/shared');
 
 function removeSearchJsonFileFromProject(argv, config) {
-  if (utils.readConfig(config, 'allowSiteToBeSearched') === false) { return; }
+  if (utils.readConfig(config, 'allowSiteToBeSearched') === false) {
+    return; 
+  }
 
   try {
     const filePath = path.resolve(process.cwd(), 'src/stache/search/search.json');

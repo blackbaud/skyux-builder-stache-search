@@ -5,7 +5,9 @@ const path = require('path');
 const utils = require('./utils/shared');
 
 function removeE2EConfig(argv, config) {
-  if (utils.readConfig(config, 'allowSiteToBeSearched') === false) { return; }
+  if (utils.readConfig(config, 'allowSiteToBeSearched') === false) {
+    return; 
+  }
 
   try {
     const filePath = path.resolve(process.cwd(), 'skyuxconfig.e2e.json');

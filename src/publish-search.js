@@ -4,13 +4,15 @@ const btoa = require('btoa');
 const fs = require('fs-extra');
 const request = require('request');
 const path = require('path');
-const audienceId = process.env.audienceId;
-const clientUserName = process.env.clientUserName;
-const clientKey = process.env.clientKey;
-const endpoint = process.env.endpoint;
 const filePath = path.resolve(process.cwd(), 'src/stache/search/search.json');
 const errorHandler = require('./error-handler');
 const utils = require('./utils/shared');
+const {
+  audienceId, 
+  clientUserName,
+  clientKey,
+  endpoint
+} = process.env;
 
 function getSearchData() {
   try {
@@ -22,7 +24,9 @@ function getSearchData() {
 }
 
 function publishSearch(argv, config) {
-  if (utils.readConfig(config, 'allowSiteToBeSearched') === false) { return; }
+  if (utils.readConfig(config, 'allowSiteToBeSearched') === false) {
+    return; 
+  }
 
   if (!fs.existsSync(filePath)) {
     return errorHandler(new Error('[ERROR]: Search json file does not exist!'), config);
