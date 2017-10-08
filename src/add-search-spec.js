@@ -15,18 +15,10 @@ import { SkyHostBrowser } from '@blackbaud/skyux-builder/runtime/testing/e2e';
 const fs = require('fs');
 const path = require('path');
 
-const walkSync = (dir: string, filePaths: string[] = []) => {
-  let files = fs.readdirSync(dir);
-  files.forEach((file: string) => {
-    if (fs.statSync(path.join(dir, file)).isDirectory()) {
-      filePaths = walkSync(path.join(dir, file), filePaths);
-    } else {
-      if (file.includes('index.html')) {
-        filePaths.push(path.join(dir, file));
-      }
-    }
+const mapFilePaths = (config: any) => {
+  return config.runtime.routes.map((route: any) => {
+    return '/' + route.routePath;
   });
-  return filePaths;
 };
 
 describe('Search Results', () => {
@@ -42,19 +34,11 @@ describe('Search Results', () => {
 
   beforeEach(() => {
     jasmine.DEFAULT_TIMEOUT_INTERVAL = 500000;
-    files = walkSync(path.join(__dirname, '..', 'src', 'app'));
-    files = files.map(file => {
-      let route = file.split('/app')[1];
-      route = route.slice(0, route.length - 11);
-      if (route === '') {
-        route = '/';
-      }
-      return route;
-    });
   });
 
   it('should generate search results', (done) => {
     let config = browser.params.skyPagesConfig;
+    files = mapFilePaths(config);
     let doesSearchConfigExist = (
       config.skyux &&
       config.skyux.appSettings &&
@@ -94,7 +78,7 @@ describe('Search Results', () => {
       };
 
       return SkyHostBrowser
-        .get(file)
+        .get(file, 3000)
         .then(() => {
           return browser.executeScript(removeUnnecessaryElements);
         })
@@ -115,6 +99,9 @@ describe('Search Results', () => {
               'Must have the <stache> tag and a pageTitle on page '
               + file + ' to scrape content.'
             );
+            return pageContent;
+          } else if (error.message.indexOf('Angular could not be found on the page') > -1) {
+            console.log('Angular not found on page ' + file + '. Skipping.');
             return pageContent;
           } else {
             throw new Error(error);
@@ -149,6 +136,7 @@ describe('Search Results', () => {
       });
   });
 });
+
 `;
 
 function addSearchSpecToProject(argv, config) {
