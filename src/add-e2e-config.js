@@ -13,7 +13,10 @@ function addE2EConfig(argv, config) {
 
   let e2eConfig = {
     auth: false,
-    omnibar: false
+    omnibar: false,
+    host: {
+      url: 'https://docs.blackbaud.com'
+    },
   };
 
   try {
