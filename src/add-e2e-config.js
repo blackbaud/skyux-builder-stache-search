@@ -14,6 +14,7 @@ function addE2EConfig(argv, config) {
   let e2eConfig = {
     auth: false,
     omnibar: false,
+    // Need to make sure the host is in here, otherwise the e2e will redirect to login even when auth is disabled.
     host: {
       url: 'https://docs.blackbaud.com'
     },

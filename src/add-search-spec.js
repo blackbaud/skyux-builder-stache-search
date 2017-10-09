@@ -16,9 +16,21 @@ const fs = require('fs');
 const path = require('path');
 
 const mapFilePaths = (config: any) => {
-  return config.runtime.routes.map((route: any) => {
-    return '/' + route.routePath;
-  });
+  let routes = config.runtime.routes
+    .map((route: any) => {
+      return '/' + route.routePath;
+    })
+    .filter((route: string) => {
+      if (route.indexOf('*') > -1) {
+        return false;
+      }
+      if (route === '/') {
+        return false;
+      }
+      return route;
+    });
+    routes.push('/');
+  return routes;
 };
 
 describe('Search Results', () => {
@@ -83,7 +95,7 @@ describe('Search Results', () => {
           return browser.executeScript(removeUnnecessaryElements);
         })
         .then(() => {
-            return element(by.css('.stache-wrapper')).getText();
+          return element(by.css('.stache-wrapper')).getText();
         })
         .then((text: string) => {
           pageContent['text'] = text;
