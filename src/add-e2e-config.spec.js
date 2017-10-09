@@ -51,7 +51,10 @@ describe('Add e2e config', () => {
     expect(console.log).toHaveBeenCalledWith(`Added ${filePath} to directory!`);
     expect(console.log).toHaveBeenCalledWith(JSON.stringify({
       auth: false,
-      omnibar: false
+      omnibar: false,
+      host: {
+        url: 'https://docs.blackbaud.com'
+      }
     }));
   });
 
@@ -62,7 +65,10 @@ describe('Add e2e config', () => {
     expect(console.log).toHaveBeenCalledWith(`Added ${filePath} to directory!`);
     expect(console.log).toHaveBeenCalledWith(JSON.stringify({
       auth: false,
-      omnibar: false
+      omnibar: false,
+      host: {
+        url: 'https://docs.blackbaud.com'
+      }
     }));
   });
 
