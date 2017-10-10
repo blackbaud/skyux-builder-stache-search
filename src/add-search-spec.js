@@ -29,7 +29,7 @@ const mapFilePaths = (config: any) => {
       }
       return route;
     });
-    routes.push('/');
+  routes.push('/');
   return routes;
 };
 
@@ -49,7 +49,10 @@ describe('Search Results', () => {
   });
 
   it('should generate search results', (done) => {
-    let config = browser.params.skyPagesConfig;
+    let config: any = browser.params.skyPagesConfig;
+    let buildConfigPath = path.resolve(process.cwd(), 'skyuxconfig.build.json');
+    let baseConfig: any = require('../skyuxconfig.json');
+    let buildConfig: any = fs.existsSync(buildConfigPath) ? require(buildConfigPath) : undefined;
     files = mapFilePaths(config);
     let doesSearchConfigExist = (
       config.skyux &&
@@ -57,13 +60,23 @@ describe('Search Results', () => {
       config.skyux.appSettings.stache &&
       config.skyux.appSettings.stache.searchConfig
     );
-    let siteName = config.skyux.name;
+
+    let siteName: string = config.skyux.name;
     if (!siteName) {
       const packageFile = require('../package.json');
       siteName = packageFile.name;
     }
-    let url = config.skyux.host.url;
-    let isInternal = doesSearchConfigExist ? config.skyux.appSettings.stache.searchConfig.is_internal : true;
+
+    let url: string;
+    if (buildConfig) {
+      url = buildConfig.host.url;
+    } else if (baseConfig.host) {
+      url = baseConfig.host.url;
+    } else {
+      url = config.skyux.host.url;
+    }
+
+    let isInternal: boolean = doesSearchConfigExist ? config.skyux.appSettings.stache.searchConfig.is_internal : true;
     let content: any = {
       site_name: siteName,
       stache_page_search_data: []
