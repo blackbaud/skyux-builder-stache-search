@@ -28,6 +28,7 @@ function publishSearch(argv, config) {
 
     try {
       let file = fs.readJsonSync(filePath);
+      file.build_version = buildVersion;
       return JSON.stringify(file);
     } catch (error) {
       return errorHandler(new Error(`[ERROR]: Unable to read search file at ${filePath}! ${error.message}`));

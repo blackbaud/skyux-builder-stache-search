@@ -111,7 +111,7 @@ describe('Search Results', () => {
           return element(by.css('.stache-wrapper')).getText();
         })
         .then((text: string) => {
-          pageContent['text'] = text.replace(/\n/g, ' ');
+          pageContent['text'] = text.replace(/\\n/g, ' ');
           return element(by.css('.stache-page-title, .stache-tutorial-heading, h1')).getText();
         })
         .then((text: string) => {
