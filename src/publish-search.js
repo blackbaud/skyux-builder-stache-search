@@ -7,23 +7,33 @@ const path = require('path');
 const filePath = path.resolve(process.cwd(), 'src/stache/search/search.json');
 const errorHandler = require('./error-handler');
 const utils = require('./utils/shared');
-const {
-  audienceId, 
-  clientUserName,
-  clientKey,
-  endpoint
-} = process.env;
-
-function getSearchData() {
-  try {
-    let file = fs.readJsonSync(filePath);
-    return JSON.stringify(file);
-  } catch (error) {
-    return errorHandler(new Error(`[ERROR]: Unable to read search file at ${filePath}! ${error.message}`));
-  }
-}
 
 function publishSearch(argv, config) {
+  let {
+    audienceId,
+    buildVersion,
+    clientUserName,
+    clientKey,
+    endpoint,
+    siteName
+  } = argv;
+
+  function getRequestBody() {
+    if (buildVersion && siteName) {
+      return JSON.stringify({
+        build_version: buildVersion,
+        site_name: siteName
+      });
+    }
+
+    try {
+      let file = fs.readJsonSync(filePath);
+      return JSON.stringify(file);
+    } catch (error) {
+      return errorHandler(new Error(`[ERROR]: Unable to read search file at ${filePath}! ${error.message}`));
+    }
+  }
+
   if (utils.readConfig(config, 'allowSiteToBeSearched') === false) {
     return; 
   }
@@ -74,7 +84,7 @@ function publishSearch(argv, config) {
           'Accept': 'application/json',
           'Authorization': `Bearer ${token.access_token}`
         },
-        body: getSearchData()
+        body: getRequestBody()
       };
       request(publishOptions)
         .on('error', error => {
