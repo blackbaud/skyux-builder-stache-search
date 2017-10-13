@@ -111,7 +111,7 @@ describe('Search Results', () => {
           return element(by.css('.stache-wrapper')).getText();
         })
         .then((text: string) => {
-          pageContent['text'] = text;
+          pageContent['text'] = text.replace(/\n/g, ' ');
           return element(by.css('.stache-page-title')).getText();
         })
         .then((text: string) => {
@@ -161,7 +161,6 @@ describe('Search Results', () => {
       });
   });
 });
-
 `;
 
 function addSearchSpecToProject(argv, config) {
