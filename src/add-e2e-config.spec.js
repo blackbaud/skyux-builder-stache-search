@@ -53,7 +53,7 @@ describe('Add e2e config', () => {
       auth: false,
       omnibar: false,
       host: {
-        url: 'https://docs.blackbaud.com'
+        url: 'https://host.nxt.blackbaud.com'
       }
     }));
   });
@@ -67,7 +67,7 @@ describe('Add e2e config', () => {
       auth: false,
       omnibar: false,
       host: {
-        url: 'https://docs.blackbaud.com'
+        url: 'https://host.nxt.blackbaud.com'
       }
     }));
   });
