@@ -3,10 +3,18 @@
 const path = require('path');
 const fs = require('fs-extra');
 const utils = require('./utils/shared');
-
 const errorHandler = require('./error-handler');
 
-const template = `// Use browser to access other sites (that are running angular)
+function addSearchSpecToProject(argv, config) {
+  if (utils.readConfig(config, 'allowSiteToBeSearched') === false) {
+    return;
+  }
+
+  if (!argv.siteName) {
+    return errorHandler(new Error('[ERROR]: Site name is required to add search spec!'), config);
+  }
+
+  const template = `// Use browser to access other sites (that are running angular)
 import { browser, element, by } from 'protractor';
 
 // Use SkyHostBrowser to access your locally served SPA
@@ -49,9 +57,10 @@ describe('Search Results', () => {
   });
 
   it('should generate search results', (done) => {
-    // Comment on why we need these separate configs for the url
+    // Separate configs are required in order to read the host url.
+    // This could be different from the e2e host url.
     let config: any = browser.params.skyPagesConfig;
-    let buildConfigPath = path.resolve(process.cwd(), 'skyuxconfig.build.json');
+    let buildConfigPath: string = path.resolve(process.cwd(), 'skyuxconfig.build.json');
     let baseConfig: any = require('../skyuxconfig.json');
     let buildConfig: any = fs.existsSync(buildConfigPath) ? require(buildConfigPath) : undefined;
     files = mapFilePaths(config);
@@ -62,11 +71,7 @@ describe('Search Results', () => {
       config.skyux.appSettings.stache.searchConfig
     );
 
-    let siteName: string = config.skyux.name;
-    if (!siteName) {
-      const packageFile = require('../package.json');
-      siteName = packageFile.name;
-    }
+    let siteName: string = ${argv.siteName}
 
     let url: string;
     if (buildConfig) {
@@ -163,12 +168,6 @@ describe('Search Results', () => {
   });
 });
 `;
-
-function addSearchSpecToProject(argv, config) {
-
-  if (utils.readConfig(config, 'allowSiteToBeSearched') === false) {
-    return; 
-  }
 
   try {
     let filePath = path.join(process.cwd(), 'e2e');

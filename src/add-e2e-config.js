@@ -3,7 +3,6 @@
 const path = require('path');
 const fs = require('fs-extra');
 const utils = require('./utils/shared');
-
 const errorHandler = require('./error-handler');
 
 function addE2EConfig(argv, config) {
