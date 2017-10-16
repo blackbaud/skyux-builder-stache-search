@@ -71,7 +71,7 @@ describe('Search Results', () => {
       config.skyux.appSettings.stache.searchConfig
     );
 
-    let siteName: string = '${argv.siteName}'
+    let siteName: string = '${argv.siteName}';
 
     let url: string;
     if (buildConfig) {
