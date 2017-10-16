@@ -91,4 +91,8 @@ describe('Remove e2e config', () => {
     expect(test).toThrowError('[ERROR]: Unable to remove skyuxconfig.e2e.json.');
   });
 
+  afterAll(() => {
+    mock.stopAll();
+  });
+
 });

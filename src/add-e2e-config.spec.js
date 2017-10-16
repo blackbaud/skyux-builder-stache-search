@@ -85,4 +85,8 @@ describe('Add e2e config', () => {
 
     expect(console.log).toHaveBeenCalledWith(new Error('[ERROR]: Unable to add stache search template to e2e directory.'));
   });
+
+  afterAll(() => {
+    mock.stopAll();
+  });
 });

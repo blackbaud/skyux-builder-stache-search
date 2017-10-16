@@ -100,4 +100,8 @@ describe('Remove Search JSON', () => {
     expect(test).toThrowError('[ERROR]: Unable to remove stache search directory.');
   });
 
+  afterAll(() => {
+    mock.stopAll();
+  });
+
 });

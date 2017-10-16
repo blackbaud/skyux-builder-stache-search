@@ -49,6 +49,7 @@ describe('Search Results', () => {
   });
 
   it('should generate search results', (done) => {
+    // Comment on why we need these separate configs for the url
     let config: any = browser.params.skyPagesConfig;
     let buildConfigPath = path.resolve(process.cwd(), 'skyuxconfig.build.json');
     let baseConfig: any = require('../skyuxconfig.json');
@@ -164,6 +165,7 @@ describe('Search Results', () => {
 `;
 
 function addSearchSpecToProject(argv, config) {
+
   if (utils.readConfig(config, 'allowSiteToBeSearched') === false) {
     return; 
   }

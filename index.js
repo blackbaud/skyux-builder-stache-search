@@ -15,6 +15,9 @@ module.exports = {
       case 'publish-search':
         require('./src/publish-search')(argv, config);
         break;
+      case 'release-search':
+        require('./src/release-search')(argv, config);
+        break;
       case 'remove-e2e-config':
         require('./src/remove-e2e-config')(argv, config);
         break;

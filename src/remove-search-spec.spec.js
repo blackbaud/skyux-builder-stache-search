@@ -92,4 +92,8 @@ describe('Remove Search Spec', () => {
     expect(test).toThrowError('[ERROR]: Unable to remove stache search template from e2e directory.');
   });
 
+  afterAll(() => {
+    mock.stopAll();
+  });
+
 });

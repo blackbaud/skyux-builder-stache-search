@@ -36,6 +36,10 @@ describe('Index', () => {
         cmd: 'publish-search',
         lib: 'publish-search'
       },
+      'release-search': {
+        cmd: 'release-search',
+        lib: 'release-search'
+      },
       'remove-e2e-config': {
         cmd: 'remove-e2e-config',
         lib: 'remove-e2e-config'
