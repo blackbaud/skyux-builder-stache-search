@@ -1,5 +1,5 @@
 # 1.1.1 (10-17-17)
-- Updated Readme [#4] (https://github.com/blackbaud/skyux-builder-stache-search/pull/4)
+- Updated Readme [#4](https://github.com/blackbaud/skyux-builder-stache-search/pull/4)
 
 # 1.1.0 (10-17-17)
 - Prefixed commands with 'stache' [#2](https://github.com/blackbaud/skyux-builder-stache-search/pull/2)
