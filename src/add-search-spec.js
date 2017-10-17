@@ -1,11 +1,20 @@
 'use strict';
 
 const path = require('path');
-const fs = require('fs');
-
+const fs = require('fs-extra');
+const utils = require('./utils/shared');
 const errorHandler = require('./error-handler');
 
-const template = `// Use browser to access other sites (that are running angular)
+function addSearchSpecToProject(argv, config) {
+  if (utils.readConfig(config, 'allowSiteToBeSearched') === false) {
+    return;
+  }
+
+  if (!argv.siteName) {
+    return errorHandler(new Error('[ERROR]: Site name is required to add search spec!'), config);
+  }
+
+  const template = `// Use browser to access other sites (that are running angular)
 import { browser, element, by } from 'protractor';
 
 // Use SkyHostBrowser to access your locally served SPA
@@ -14,18 +23,22 @@ import { SkyHostBrowser } from '@blackbaud/skyux-builder/runtime/testing/e2e';
 const fs = require('fs');
 const path = require('path');
 
-const walkSync = (dir: string, filePaths: string[] = []) => {
-  let files = fs.readdirSync(dir);
-  files.forEach((file: string) => {
-    if (fs.statSync(path.join(dir, file)).isDirectory()) {
-      filePaths = walkSync(path.join(dir, file), filePaths);
-    } else {
-      if (file.includes('index.html')) {
-        filePaths.push(path.join(dir, file));
+const mapFilePaths = (config: any) => {
+  let routes = config.runtime.routes
+    .map((route: any) => {
+      return '/' + route.routePath;
+    })
+    .filter((route: string) => {
+      if (route.indexOf('*') > -1) {
+        return false;
       }
-    }
-  });
-  return filePaths;
+      if (route === '/') {
+        return false;
+      }
+      return route;
+    });
+  routes.push('/');
+  return routes;
 };
 
 describe('Search Results', () => {
@@ -41,25 +54,35 @@ describe('Search Results', () => {
 
   beforeEach(() => {
     jasmine.DEFAULT_TIMEOUT_INTERVAL = 500000;
-    files = walkSync(path.join(__dirname, '..', 'src', 'app'));
-    files = files.map(file => {
-      let route = file.split('/app')[1];
-      route = route.slice(0, route.length - 11);
-      if (route === '') {
-        route = '/';
-      }
-      return route;
-    });
   });
 
   it('should generate search results', (done) => {
-    let config = JSON.parse(browser.params.skyPagesConfig);
-    let siteName = config.skyux.name;
-    if (!siteName) {
-      const packageFile = require('../package.json');
-      siteName = packageFile.name;
+    // Separate configs are required in order to read the host url.
+    // This could be different from the e2e host url.
+    let config: any = browser.params.skyPagesConfig;
+    let buildConfigPath: string = path.resolve(process.cwd(), 'skyuxconfig.build.json');
+    let baseConfig: any = require('../skyuxconfig.json');
+    let buildConfig: any = fs.existsSync(buildConfigPath) ? require(buildConfigPath) : undefined;
+    files = mapFilePaths(config);
+    let doesSearchConfigExist = (
+      config.skyux &&
+      config.skyux.appSettings &&
+      config.skyux.appSettings.stache &&
+      config.skyux.appSettings.stache.searchConfig
+    );
+
+    let siteName: string = '${argv.siteName}';
+
+    let url: string;
+    if (buildConfig) {
+      url = buildConfig.host.url;
+    } else if (baseConfig.host) {
+      url = baseConfig.host.url;
+    } else {
+      url = config.skyux.host.url;
     }
-    let url = config.skyux.host.url;
+
+    let isInternal: boolean = doesSearchConfigExist ? config.skyux.appSettings.stache.searchConfig.is_internal : true;
     let content: any = {
       site_name: siteName,
       stache_page_search_data: []
@@ -81,20 +104,21 @@ describe('Search Results', () => {
       let pageContent: any = {
         host: url,
         site_name: siteName,
-        path: file
+        path: file,
+        is_internal: isInternal
       };
 
       return SkyHostBrowser
-        .get(file)
+        .get(file, 3000)
         .then(() => {
           return browser.executeScript(removeUnnecessaryElements);
         })
         .then(() => {
-            return element(by.css('.stache-wrapper')).getText();
+          return element(by.css('.stache-wrapper')).getText();
         })
         .then((text: string) => {
-          pageContent['text'] = text;
-          return element(by.css('.stache-page-title')).getText();
+          pageContent['text'] = text.replace(/\\n/g, ' ');
+          return element(by.css('.stache-page-title, .stache-tutorial-heading, h1')).getText();
         })
         .then((text: string) => {
           pageContent['title'] = text;
@@ -106,6 +130,9 @@ describe('Search Results', () => {
               'Must have the <stache> tag and a pageTitle on page '
               + file + ' to scrape content.'
             );
+            return pageContent;
+          } else if (error.message.indexOf('Angular could not be found on the page') > -1) {
+            console.log('Angular not found on page ' + file + '. Skipping.');
             return pageContent;
           } else {
             throw new Error(error);
@@ -142,20 +169,14 @@ describe('Search Results', () => {
 });
 `;
 
-function addSearchSpecToProject(argv, config) {
-  if (config &&
-    config.appSettings &&
-    config.appSettings.stache &&
-    config.appSettings.stache.search) {
-    try {
-      let filePath = path.join(process.cwd(), 'e2e');
-      if (!fs.existsSync(filePath)) {
-        fs.mkdirSync(filePath);
-      }
-      fs.writeFileSync(path.join(filePath, 'stache-search.e2e-spec.ts'), template);
-    } catch (error) {
-      return errorHandler(new Error('[ERROR]: Unable to add stache search template to e2e directory.'), config);
+  try {
+    let filePath = path.join(process.cwd(), 'e2e');
+    if (!fs.existsSync(filePath)) {
+      fs.mkdirSync(filePath);
     }
+    fs.writeFileSync(path.join(filePath, 'stache-search.e2e-spec.ts'), template);
+  } catch (error) {
+    return errorHandler(new Error('[ERROR]: Unable to add stache search template to e2e directory.'), config);
   }
 }
 

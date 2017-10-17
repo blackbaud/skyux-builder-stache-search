@@ -3,8 +3,8 @@
 const fs = require('fs-extra');
 const mock = require('mock-require');
 
-describe('Remove Search JSON', () => {
-  let removeSearchJSON;
+describe('Remove e2e config', () => {
+  let removeE2EConfig;
   const config = {
     appSettings: {
       stache: {
@@ -23,49 +23,42 @@ describe('Remove Search JSON', () => {
           return true;
         }
       },
-      rmdirSync: function (filePath) {
-        console.log(`Directory deleted: ${filePath}`);
-      },
       unlinkSync: function (filePath) {
         console.log(`File deleted: ${filePath}`);
       }
     });
 
     mock('path', {
-      dirname: function () {
-        return './src/stache/search/';
-      },
       resolve: function () {
-        return './src/stache/search/search.json';
+        return './skyuxconfig.e2e.json';
       }
     });
   });
 
   beforeEach(() => {
-    removeSearchJSON = mock.reRequire('./remove-search-json');
+    removeE2EConfig = mock.reRequire('./remove-e2e-config');
   });
 
   it('should not remove the file if search is false', () => {
     spyOn(fs, 'existsSync');
-    removeSearchJSON([], config);
+    removeE2EConfig([], config);
     expect(fs.existsSync).not.toHaveBeenCalled();
   });
 
   it('should remove the file by default if search is undefined', () => {
-    const filePath = './src/stache/search/search.json';
+    const filePath = './skyuxconfig.e2e.json';
     spyOn(console, 'log');
-    removeSearchJSON([], undefined);
-    expect(console.log).toHaveBeenCalledWith(`Directory deleted: ${filePath.slice(0, -11)}`);
+    removeE2EConfig([], undefined);
+
     expect(console.log).toHaveBeenCalledWith(`File deleted: ${filePath}`);
     expect(console.log).toHaveBeenCalledWith('File exists');
   });
 
-  it('should remove the file if search is set to true and the file exists', () => {
-    const filePath = './src/stache/search/search.json';
-    config.appSettings.stache.searchConfig.allowSiteToBeSearched = true;
+  it('should remove the file if it exists', () => {
+    const filePath = './skyuxconfig.e2e.json';
     spyOn(console, 'log');
-    removeSearchJSON([], config);
-    expect(console.log).toHaveBeenCalledWith(`Directory deleted: ${filePath.slice(0, -11)}`);
+    removeE2EConfig([], undefined);
+
     expect(console.log).toHaveBeenCalledWith(`File deleted: ${filePath}`);
     expect(console.log).toHaveBeenCalledWith('File exists');
   });
@@ -80,9 +73,8 @@ describe('Remove Search JSON', () => {
       }
     });
     spyOn(console, 'log');
-    config.appSettings.stache.searchConfig.allowSiteToBeSearched = true;
-    removeSearchJSON = mock.reRequire('./remove-search-json');
-    removeSearchJSON([], config);
+    removeE2EConfig = mock.reRequire('./remove-e2e-config');
+    removeE2EConfig([], undefined);
     expect(console.log).not.toHaveBeenCalledWith('I should not fire!');
   });
 
@@ -92,12 +84,11 @@ describe('Remove Search JSON', () => {
         throw new Error('Test error');
       }
     });
-    removeSearchJSON = mock.reRequire('./remove-search-json');
-    config.appSettings.stache.searchConfig.allowSiteToBeSearched = true;
+    removeE2EConfig = mock.reRequire('./remove-e2e-config');
     let test = function () {
-      return removeSearchJSON([], config);
+      return removeE2EConfig([], undefined);
     }
-    expect(test).toThrowError('[ERROR]: Unable to remove stache search directory.');
+    expect(test).toThrowError('[ERROR]: Unable to remove skyuxconfig.e2e.json.');
   });
 
   afterAll(() => {

@@ -31,4 +31,8 @@ describe('Error Handler', () => {
     expect(console.log).toHaveBeenCalledWith('Remove Search Json Called null Config');
     expect(console.log).toHaveBeenCalledWith('Remove Search Spec Called null Config');
   });
+
+  afterAll(() => {
+    mock.stopAll();
+  });
 });

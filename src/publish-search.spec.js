@@ -2,19 +2,24 @@
 
 const mock = require('mock-require');
 const fs = require('fs-extra');
+const readConfig = require('./utils/shared').readConfig;
 
 describe('Publish Search', () => {
+  let args;
   let publishSearch;
+
   const config = {
     appSettings: {
       stache: {
-        search: false
+        searchConfig: {
+          allowSiteToBeSearched: false
+        }
       }
     }
   };
 
-  beforeEach(() => {  
-    mock('./error-handler', function(error) {
+  beforeEach(() => {
+    mock('./error-handler', function (error) {
       console.log(error);
     });
 
@@ -26,52 +31,49 @@ describe('Publish Search', () => {
       readJsonSync: function (filePath) {
         console.log(`${filePath} found!`);
         return {
-          test: "Some Example JSON"
+          test: 'Some Example JSON'
         };
       }
     });
 
-    mock('request', function (options, callback) {
-      console.log(options.headers.Authorization);
-      console.log(options.body);
-      console.log(options.uri);
-      callback(null, {statusCode: 200});
-    });
-
     mock('path', {
-      join: function () {
+      resolve: function () {
         console.log('We have a path!');
         return './src/stache/search.json';
       }
     });
 
-    process.env.searchEndpoint = "https://localhost:5000/publisher";
-    process.env.token = "thisisatoken";
+    mock('./utils/shared', {
+      readConfig: readConfig,
+      makeRequest: function (conf, body) {
+        console.log('Request made!');
+        console.log('We have a config ', conf);
+        console.log('We have a body ', body);
+      }
+    });
+
+    args = {
+      endpoint: 'https://localhost:5000/publisher',
+      audienceId: 'Audience\\Id',
+      clientUserName: 't01\\example',
+      clientKey: 'apassword',
+      buildVersion: 'test'
+    };
+
     publishSearch = mock.reRequire('./publish-search');
-    config.appSettings.stache.search = true;
   });
 
   it('should do nothing if search is false', () => {
-    config.appSettings.stache.search = false;
     spyOn(fs, 'existsSync');
-    publishSearch([], config);
+    publishSearch(args, config);
     expect(fs.existsSync).not.toHaveBeenCalled();
   });
 
-  it('should exit if search is undefined', () => {
-    config.appSettings.stache.search = false;
-    spyOn(fs, 'existsSync');
-    publishSearch([], undefined);
-    publishSearch([], {});
-    publishSearch([], {
-      appSettings: {}
-    });
-    publishSearch([], {
-      appSettings: {
-        stache: {}
-      }
-    });
-    expect(fs.existsSync).not.toHaveBeenCalled();
+  it('should publish search by default if searchConfig is undefined', () => {
+    let filePath = './src/stache/search.json';
+    spyOn(console, 'log');
+    publishSearch(args, undefined);
+    expect(console.log).toHaveBeenCalledWith(`${filePath} exists!`);
   });
 
   it('should error if no search json file is found', () => {
@@ -83,45 +85,53 @@ describe('Publish Search', () => {
     });
     publishSearch = mock.reRequire('./publish-search');
     spyOn(console, 'log');
-    publishSearch([], config);
+    publishSearch(args, undefined);
     expect(console.log).toHaveBeenCalledWith(new Error('[ERROR]: Search json file does not exist!'));
     expect(console.log).toHaveBeenCalledWith('Does not exist!');
   });
 
   it('should error if an endpoint is not provided', () => {
-    delete process.env.searchEndpoint;
+    delete args.endpoint;
     publishSearch = mock.reRequire('./publish-search');
     spyOn(console, 'log');
-    publishSearch([], config);
+    publishSearch(args, undefined);
     expect(console.log).toHaveBeenCalledWith(new Error('[ERROR]: An endpoint is required to publish stache search data!'));
   });
 
-  it('should error if a token is not provided', () => {
-    delete process.env.token;
+  it('should error if an audienceId is not provided', () => {
+    delete args.audienceId;
     publishSearch = mock.reRequire('./publish-search');
     spyOn(console, 'log');
-    publishSearch([], config);
+    publishSearch(args, undefined);
 
-    expect(console.log).toHaveBeenCalledWith(new Error('[ERROR]: A token is required to publish stache search data!'));
+    expect(console.log).toHaveBeenCalledWith(new Error('[ERROR]: An audienceId is required to publish stache search data!'));
   });
 
-  it('should post the json file to the database', () => {
-    spyOn(console, 'log');
-    publishSearch([], config);
-    expect(console.log).toHaveBeenCalledWith(process.env.searchEndpoint);
-    expect(console.log).toHaveBeenCalledWith(`Bearer ${process.env.token}`);
-    expect(console.log).toHaveBeenCalledWith(JSON.stringify({ test: "Some Example JSON" }));
-    expect(console.log).toHaveBeenCalledWith('200: Search data successfully posted!');
-  });
-
-  it('should throw an error if file post unsuccessful', () => {
-    mock('request', function (options, callback) {
-      callback({message: 'ERROR!'});
-    });
+  it('should error if a clientUserName is not provided', () => {
+    delete args.clientUserName;
     publishSearch = mock.reRequire('./publish-search');
     spyOn(console, 'log');
-    publishSearch([], config);
-    expect(console.log).toHaveBeenCalledWith(new Error('[ERROR]: Unable to post search data! ERROR!'));
+    publishSearch(args, undefined);
+
+    expect(console.log).toHaveBeenCalledWith(new Error('[ERROR]: Client User Name and Client Key are required to publish stache search data!'));
+  });
+
+  it('should error if a clientKey is not provided', () => {
+    delete args.clientKey;
+    publishSearch = mock.reRequire('./publish-search');
+    spyOn(console, 'log');
+    publishSearch(args, undefined);
+
+    expect(console.log).toHaveBeenCalledWith(new Error('[ERROR]: Client User Name and Client Key are required to publish stache search data!'));
+  });
+
+  it('should error if a buildVersion is not provided', () => {
+    delete args.buildVersion;
+    publishSearch = mock.reRequire('./publish-search');
+    spyOn(console, 'log');
+    publishSearch(args, undefined);
+
+    expect(console.log).toHaveBeenCalledWith(new Error('[ERROR]: A build version is required to publish stache search data!'));
   });
 
   it('should throw an error if unable to read search json file', () => {
@@ -136,8 +146,22 @@ describe('Publish Search', () => {
     });
     publishSearch = mock.reRequire('./publish-search');
     spyOn(console, 'log');
-    publishSearch([], config);
+    publishSearch(args, undefined);
     expect(console.log).toHaveBeenCalledWith(new Error('[ERROR]: Unable to read search file at ./src/stache/search.json! It is broken!'));
+  });
+
+  it('should call the makeRequest method with the arguments and request body', () => {
+    publishSearch = mock.reRequire('./publish-search');
+    spyOn(console, 'log');
+    publishSearch(args, undefined);
+
+    expect(console.log).toHaveBeenCalledWith('Request made!');
+    expect(console.log).toHaveBeenCalledWith('We have a config ', args);
+    expect(console.log).toHaveBeenCalledWith('We have a body ', JSON.stringify({ test: 'Some Example JSON', build_version: 'test' }));
+  });
+
+  afterAll(() => {
+    mock.stopAll();
   });
 
 });
