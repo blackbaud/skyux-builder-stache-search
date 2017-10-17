@@ -24,32 +24,32 @@ describe('Index', () => {
 
   it('should handle known commands', () => {
     const cmds = {
-      'add-search-spec': {
-        cmd: 'add-search-spec',
+      'stache-add-search-spec': {
+        cmd: 'stache-add-search-spec',
         lib: 'add-search-spec'
       },
-      'add-e2e-config': {
-        cmd: 'add-e2e-config',
+      'stache-add-e2e-config': {
+        cmd: 'stache-add-e2e-config',
         lib: 'add-e2e-config'
       },
-      'publish-search': {
-        cmd: 'publish-search',
+      'stache-publish-search': {
+        cmd: 'stache-publish-search',
         lib: 'publish-search'
       },
-      'release-search': {
-        cmd: 'release-search',
+      'stache-release-search': {
+        cmd: 'stache-release-search',
         lib: 'release-search'
       },
-      'remove-e2e-config': {
-        cmd: 'remove-e2e-config',
+      'stache-remove-e2e-config': {
+        cmd: 'stache-remove-e2e-config',
         lib: 'remove-e2e-config'
       },
-      'remove-search-json': {
-        cmd: 'remove-search-json',
+      'stache-remove-search-json': {
+        cmd: 'stache-remove-search-json',
         lib: 'remove-search-json'
       },
-      'remove-search-spec': {
-        cmd: 'remove-search-spec',
+      'stache-remove-search-spec': {
+        cmd: 'stache-remove-search-spec',
         lib: 'remove-search-spec'
       }
     };
@@ -70,7 +70,7 @@ describe('Index', () => {
   });
 
   it('should return true for known command', () => {
-    const cmd = 'publish-search';
+    const cmd = 'stache-publish-search';
     const lib = require('../index');
     expect(lib.runCommand(cmd, {})).toBe(true);
   });
