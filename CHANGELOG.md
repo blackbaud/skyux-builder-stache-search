@@ -1,4 +1,4 @@
-# 1.2.0 (10-24-17)
+# 1.1.1 (10-24-17)
 - Removed config check for release command. [#5](https://github.com/blackbaud/skyux-builder-stache-search/pull/5)
 
 # 1.1.0 (10-17-17)
