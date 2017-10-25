@@ -1,5 +1,6 @@
 # 1.1.1 (10-24-17)
 - Removed config check for release command. [#5](https://github.com/blackbaud/skyux-builder-stache-search/pull/5)
+- Updated e2e config logic to enable auth
 
 # 1.1.0 (10-17-17)
 - Prefixed commands with 'stache' [#2](https://github.com/blackbaud/skyux-builder-stache-search/pull/2)
