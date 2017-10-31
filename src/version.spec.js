@@ -7,6 +7,7 @@ describe('version', () => {
     mock('fs-extra', {
       readJsonSync: function () {
         return {
+          name: 'test',
           version: '1.0.0'
         };
       }
@@ -17,7 +18,7 @@ describe('version', () => {
   it('should log the version of the package', () => {
     spyOn(console, 'log');
     version();
-    expect(console.log).toHaveBeenCalledWith('1.0.0');
+    expect(console.log).toHaveBeenCalledWith('test 1.0.0');
   });
 
   afterAll(() => {

@@ -3,7 +3,7 @@ const path = require('path');
 
 function version() {
   const packageJson = fs.readJsonSync(path.resolve(__dirname, '..', 'package.json'));
-  console.log(packageJson.version);
+  console.log(packageJson.name + ' ' + packageJson.version);
 }
 
 module.exports = version;
