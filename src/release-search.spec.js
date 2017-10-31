@@ -1,22 +1,11 @@
 'use strict';
 
 const mock = require('mock-require');
-const fs = require('fs-extra');
 const readConfig = require('./utils/shared').readConfig;
 
 describe('Release Search', () => {
   let args;
   let releaseSearch;
-
-  const config = {
-    appSettings: {
-      stache: {
-        searchConfig: {
-          allowSiteToBeSearched: false
-        }
-      }
-    }
-  };
 
   beforeEach(() => {
     mock('./error-handler', function (error) {
@@ -42,18 +31,6 @@ describe('Release Search', () => {
     };
 
     releaseSearch = mock.reRequire('./release-search');
-  });
-
-  it('should do nothing if search is false', () => {
-    spyOn(fs, 'existsSync');
-    releaseSearch(args, config);
-    expect(fs.existsSync).not.toHaveBeenCalled();
-  });
-
-  it('should release search by default if searchConfig is undefined', () => {
-    spyOn(console, 'log');
-    releaseSearch(args, undefined);
-    expect(console.log).toHaveBeenCalledWith('Request made!');
   });
 
   it('should error if an endpoint is not provided', () => {

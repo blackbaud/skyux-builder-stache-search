@@ -1,3 +1,9 @@
+# 1.2.0 (10-31-17)
+- Removed config check for release command. [#5](https://github.com/blackbaud/skyux-builder-stache-search/pull/5)
+- Updated e2e config logic to remove auth key [#5](https://github.com/blackbaud/skyux-builder-stache-search/pull/5)
+- Added Version command [#5](https://github.com/blackbaud/skyux-builder-stache-search/pull/5)
+- Fixed issue with config not being found in non-spa contexts [#5](https://github.com/blackbaud/skyux-builder-stache-search/pull/5)
+
 # 1.1.0 (10-17-17)
 - Prefixed commands with 'stache' [#2](https://github.com/blackbaud/skyux-builder-stache-search/pull/2)
 - Added new e2e commands [#2](https://github.com/blackbaud/skyux-builder-stache-search/pull/2)

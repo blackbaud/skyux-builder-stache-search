@@ -4,10 +4,6 @@ const errorHandler = require('./error-handler');
 const utils = require('./utils/shared');
 
 function releaseSearch(argv, config) {
-  if (utils.readConfig(config, 'allowSiteToBeSearched') === false) {
-    return;
-  }
-
   if (!argv.endpoint) {
     return errorHandler(new Error('[ERROR]: An endpoint is required to release stache search data!'), config);
   }

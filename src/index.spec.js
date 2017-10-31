@@ -51,13 +51,19 @@ describe('Index', () => {
       'stache-remove-search-spec': {
         cmd: 'stache-remove-search-spec',
         lib: 'remove-search-spec'
+      },
+      'version': {
+        cmd: 'version',
+        lib: 'version'
       }
     };
 
     Object.keys(cmds).forEach((key) => {
-      mock('./' + cmds[key].lib, () => {
-        cmds[key].called = true;
-      });
+      if (cmds[key].lib) {
+        mock('./' + cmds[key].lib, () => {
+          cmds[key].called = true;
+        });
+      }
       index.runCommand(cmds[key].cmd, {});
         expect(cmds[key].called).toEqual(true);
     });
@@ -74,6 +80,22 @@ describe('Index', () => {
     const lib = require('../index');
     expect(lib.runCommand(cmd, {})).toBe(true);
   });
+
+  it('should pass in an empty config if none is found', () => {
+    mock('path', {
+      join: function () {
+        return './src/fixtures/mock-config-nope.json';
+      }
+    });
+    mock('./add-e2e-config', (argv, config) => {
+      console.log(config);
+    });
+    
+    spyOn(console, 'log');
+    index = mock.reRequire('../index');
+    index.runCommand('stache-add-e2e-config', {});
+    expect(console.log).toHaveBeenCalledWith({});
+  });  
 
   afterAll(() => {
     mock.stopAll();
