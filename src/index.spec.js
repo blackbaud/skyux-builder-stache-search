@@ -90,6 +90,7 @@ describe('Index', () => {
     mock('./add-e2e-config', (argv, config) => {
       console.log(config);
     });
+    
     spyOn(console, 'log');
     index = mock.reRequire('../index');
     index.runCommand('stache-add-e2e-config', {});
