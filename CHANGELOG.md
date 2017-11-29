@@ -1,3 +1,6 @@
+# 1.3.0 (11-29-17)
+- Added changes to the e2e spec to publish the config. [#6](https://github.com/blackbaud/skyux-builder-stache-search/pull/6)
+
 # 1.2.0 (10-31-17)
 - Removed config check for release command. [#5](https://github.com/blackbaud/skyux-builder-stache-search/pull/5)
 - Updated e2e config logic to remove auth key [#5](https://github.com/blackbaud/skyux-builder-stache-search/pull/5)
