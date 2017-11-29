@@ -41,6 +41,28 @@ const mapFilePaths = (config: any) => {
   return routes;
 };
 
+const initSearchConfig = (config: any, siteName: string): any => {
+  let result: any = {};
+  let doesSearchConfigExist: boolean = (
+    config.skyux &&
+    config.skyux.appSettings &&
+    config.skyux.appSettings.stache &&
+    config.skyux.appSettings.stache.searchConfig
+  );
+
+  result.id = siteName;
+  result.site_names = [siteName];
+  result.is_internal = true;
+
+  if (doesSearchConfigExist) {
+    let searchConfig = config.skyux.appSettings.stache.searchConfig;
+    result.site_names = searchConfig.site_names || result.site_names;
+    result.is_internal = searchConfig.is_internal !== undefined ? searchConfig.is_internal : result.is_internal;
+  }
+
+  return result;
+};
+
 describe('Search Results', () => {
   let files: string[];
 
@@ -59,18 +81,12 @@ describe('Search Results', () => {
   it('should generate search results', (done) => {
     // Separate configs are required in order to read the host url.
     // This could be different from the e2e host url.
+
     let config: any = browser.params.skyPagesConfig;
     let buildConfigPath: string = path.resolve(process.cwd(), 'skyuxconfig.build.json');
     let baseConfig: any = require('../skyuxconfig.json');
     let buildConfig: any = fs.existsSync(buildConfigPath) ? require(buildConfigPath) : undefined;
     files = mapFilePaths(config);
-    let doesSearchConfigExist = (
-      config.skyux &&
-      config.skyux.appSettings &&
-      config.skyux.appSettings.stache &&
-      config.skyux.appSettings.stache.searchConfig
-    );
-
     let siteName: string = '${argv.siteName}';
 
     let url: string;
@@ -82,8 +98,9 @@ describe('Search Results', () => {
       url = config.skyux.host.url;
     }
 
-    let isInternal: boolean = doesSearchConfigExist ? config.skyux.appSettings.stache.searchConfig.is_internal : true;
+    let searchConfig = initSearchConfig(config, siteName);
     let content: any = {
+      config: searchConfig,
       site_name: siteName,
       stache_page_search_data: []
     };
@@ -104,8 +121,7 @@ describe('Search Results', () => {
       let pageContent: any = {
         host: url,
         site_name: siteName,
-        path: file,
-        is_internal: isInternal
+        path: file
       };
 
       return SkyHostBrowser
