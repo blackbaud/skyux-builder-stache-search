@@ -22,16 +22,6 @@ Add `searchConfig` to the `stache` object in your `skyuxconfig.json` file's `app
       "allowSiteToBeSearched": true,
       "is_internal": true,
       "site_names": ['stache2'],
-      "endpoints": {
-        "internal": "query",
-        "public": "query-public"
-      },
-      "htmlFields": {
-        "description": true
-      },
-      "moreResultsUrl": "https://blackbaud.com",
-      "moreResultsLabel": "Show More",
-      "url": "https://stache-search-query.sky.blackbaud.com"
     }
   }
 }
@@ -47,27 +37,7 @@ This setting indicates whether a Stache site is internal only or not. The defaul
 
 ### site_names
 
-This setting determines which Stache sites should be included in the search results. The default is only the site you are currently on. If you add other site names to the array, it will add those sites' contents to the searchable content. You can search all sites by setting this to an empty array.
-
-### endpoints
-
-This setting determines which endpoints you should hit for internal only and the public queries. Internal only queries are locked behind auth. The defaults are `query` for internal and `query-public` for public. 
-
-### htmlFields
-
-This setting indicates whether a field should include HTML in the search results in the omnibar. This is primarily used for search hit highlighting. The default is `description`.
-
-### moreResultsUrl
-
-This is the url for the link to more results at the end of the Omnibar search results list. The default is `undefined`.
-
-### moreResultsLabel
-
-This is the label for the more results link in the Omnibar search results. The default is `Show More`.
-
-### url
-
-This is the url for the search query service. When combined with the `endpoints`, it creates the url for the search to query. The default is `https://stache-search-query.sky.blackbaud.com`.
+This setting determines which Stache sites should be included in the search results. The default is only the site you are currently on. If you add other site names to the array, it will add those sites' contents to the searchable content.
 
 ## Found an issue?
 
