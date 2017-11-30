@@ -66,7 +66,16 @@ function makeRequest(config, body) {
           if (response.statusCode === 200) {
             return console.log(`${response.statusCode}: Search data successfully posted!`);
           }
-          errorHandler(new Error(`[ERROR]: Unable to post search data! ${response.statusCode} ${response.statusMessage ? ": " + response.statusMessage : undefined}`), config);
+
+          let data;
+
+          response.on('data', chunk => {
+            data += chunk;
+          });
+
+          response.on('end', () => {
+            errorHandler(new Error(`[ERROR]: Unable to post search data! ${response.statusCode} : ${data}`), config);
+          });
         });
     });
 }
