@@ -2,6 +2,7 @@ const utils = require('./shared');
 const mock = require('mock-require');
 const btoa = require('btoa');
 const EventEmitter = require('events').EventEmitter;
+const IncomingMessage = require('http').IncomingMessage;
 
 describe('Utils', () => {
   describe('Utils.readConfig', () => {
@@ -116,15 +117,20 @@ describe('Utils', () => {
 
     it('should throw an error if the status code on post !== 200', () => {
       spyOn(console, 'log');
+      let response = new IncomingMessage(new EventEmitter())
+      response.statusCode = 500;
+      response.statusMessage = 'Error response';
+
       makeRequest(args, body);
       emitter.emit('data', new Buffer(JSON.stringify({
         access_token: 'test'
       })));
       emitter.emit('end');
-      emitter.emit('response', {
-        statusCode: 500
-      });
-      expect(console.log).toHaveBeenCalledWith(new Error(`[ERROR]: Unable to post search data! 500`));
+      emitter.emit('response', response);
+      response.emit('data', response.statusMessage);
+      response.emit('end');
+
+      expect(console.log).toHaveBeenCalledWith(new Error(`[ERROR]: Unable to post search data! 500 : Error response`));
     });
 
   });
