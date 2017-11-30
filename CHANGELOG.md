@@ -1,3 +1,6 @@
+# 1.3.1 (11-30-17)
+- Updated error handler to display error response from server.
+
 # 1.3.0 (11-29-17)
 - Added changes to the e2e spec to publish the config. [#6](https://github.com/blackbaud/skyux-builder-stache-search/pull/6)
 
