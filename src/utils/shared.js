@@ -67,7 +67,7 @@ function makeRequest(config, body) {
             return console.log(`${response.statusCode}: Search data successfully posted!`);
           }
 
-          let data;
+          let data = '';
 
           response.on('data', chunk => {
             data += chunk;
