@@ -19,8 +19,10 @@ function addE2EConfig(argv, config) {
   };
 
   try {
-    let filePath = path.join(process.cwd());
-    fs.writeJsonSync(path.join(filePath, 'skyuxconfig.e2e.json'), e2eConfig);
+    const filePath = path.join(process.cwd(), 'skyuxconfig.e2e.json');
+    if (!fs.existsSync(filePath)) {
+      fs.writeJsonSync(filePath, e2eConfig);
+    }
   } catch (error) {
     return errorHandler(new Error('[ERROR]: Unable to add stache search template to e2e directory.'), config);
   }

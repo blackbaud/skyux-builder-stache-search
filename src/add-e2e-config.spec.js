@@ -16,14 +16,17 @@ describe('Add e2e config', () => {
   };
   const filePath = './skyuxconfig.e2e.json';
 
-  beforeAll(() => {
+  beforeEach(() => {
     mock('./error-handler', function (error) {
       console.log(error);
     });
 
     mock('fs-extra', {
+      existsSync: function () {
+        return false;
+      },
       writeJsonSync: function (filePath, contents) {
-        console.log(`Added ${filePath} to directory!`); 
+        console.log(`Added ${filePath} to directory!`);
         console.log(JSON.stringify(contents));
       }
     });
@@ -33,13 +36,24 @@ describe('Add e2e config', () => {
         return './skyuxconfig.e2e.json';
       }
     });
-  });
-
-  beforeEach(() => {
+    
     addE2EConfig = mock.reRequire('./add-e2e-config');
   });
 
   it('should not add the file if search is false', () => {
+    spyOn(fs, 'writeJsonSync');
+    addE2EConfig([], config);
+    expect(fs.writeJsonSync).not.toHaveBeenCalled();
+  });
+
+  it('should not add the file if it already exists', () => {
+    config.appSettings.stache.searchConfig.allowSiteToBeSearched = true;
+    mock('fs-extra', {
+      existsSync: function () {
+        return true;
+      }
+    });
+    addE2EConfig = mock.reRequire('./add-e2e-config');
     spyOn(fs, 'writeJsonSync');
     addE2EConfig([], config);
     expect(fs.writeJsonSync).not.toHaveBeenCalled();
