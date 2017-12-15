@@ -1,3 +1,6 @@
+# 1.3.2 (12-15-17)
+- Updated add e2e config to not add the file if it already exists.
+
 # 1.3.1 (11-30-17)
 - Updated error handler to display error response from server.
 
