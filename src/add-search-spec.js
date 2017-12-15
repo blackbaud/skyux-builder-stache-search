@@ -168,7 +168,9 @@ describe('Search Results', () => {
           'search'
         );
 
-        content.stache_page_search_data = pageContents;
+        content.stache_page_search_data = pageContents.filter((page: any) => {
+          return (page.text !== undefined && page.text !== '');
+        });
 
         if (!fs.existsSync(searchDirPath)) {
           fs.mkdirSync(searchDirPath);
