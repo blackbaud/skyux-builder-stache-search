@@ -1,8 +1,8 @@
 # 1.3.2 (12-15-17)
-- Updated add e2e config to not add the file if it already exists.
+- Updated add e2e config to not add the file if it already exists. [#9](https://github.com/blackbaud/skyux-builder-stache-search/pull/9)
 
 # 1.3.1 (11-30-17)
-- Updated error handler to display error response from server.
+- Updated error handler to display error response from server. [#8](https://github.com/blackbaud/skyux-builder-stache-search/pull/8)
 
 # 1.3.0 (11-29-17)
 - Added changes to the e2e spec to publish the config. [#6](https://github.com/blackbaud/skyux-builder-stache-search/pull/6)
