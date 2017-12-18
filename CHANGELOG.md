@@ -1,3 +1,6 @@
+# 1.3.3 (12-18-17)
+- Updated e2e spec file to filter out pages with no text content.
+
 # 1.3.2 (12-15-17)
 - Updated add e2e config to not add the file if it already exists. [#9](https://github.com/blackbaud/skyux-builder-stache-search/pull/9)
 
