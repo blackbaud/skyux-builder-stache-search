@@ -16,7 +16,6 @@ function removeSearchJsonFileFromProject(argv, config) {
       fs.rmdirSync(path.dirname(filePath));
     }
   } catch (error) {
-    console.log('error', error);
     throw new Error('[ERROR]: Unable to remove stache search directory.');
   }
 }
