@@ -1,8 +1,11 @@
+# 1.4.1 (1-10-18)
+- Fixed trailing whitespace in e2e template[#15](https://github.com/blackbaud/skyux-builder-stache-search/pull/15)
+
 # 1.4.0 (1-10-18)
-- Converted logging from console to Winston.
+- Converted logging from console to Winston.[#13](https://github.com/blackbaud/skyux-builder-stache-search/pull/13)
 
 # 1.3.3 (12-18-17)
-- Updated e2e spec file to filter out pages with no text content.
+- Updated e2e spec file to filter out pages with no text content.[#11](https://github.com/blackbaud/skyux-builder-stache-search/pull/11)
 
 # 1.3.2 (12-15-17)
 - Updated add e2e config to not add the file if it already exists. [#9](https://github.com/blackbaud/skyux-builder-stache-search/pull/9)
