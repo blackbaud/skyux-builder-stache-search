@@ -1,4 +1,4 @@
-const logger = require('./utils/shared').logger;
+const logger = require('./utils/logger');
 
 function errorHandler(err, config) {
   logger.error(err);
