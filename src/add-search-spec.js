@@ -150,7 +150,7 @@ describe('Search Results', () => {
             );
             return pageContent;
           } else if (error.message.indexOf('Angular could not be found on the page') > -1) {
-            // Same theory here. Some pages, such as ones that redirect to other sites, may cause an 
+            // Same theory here. Some pages, such as ones that redirect to other sites, may cause an
             // Angular not found on page error. In this case, we just want to skip the page and move
             // on rather than failing the build.
             console.log('Angular not found on page ' + file + '. Skipping.');
