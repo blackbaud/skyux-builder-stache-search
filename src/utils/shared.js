@@ -1,18 +1,7 @@
 const btoa = require('btoa');
 const request = require('request');
-const winston = require('winston');
 const errorHandler = require('../error-handler');
-
-const logger = new winston.Logger({
-  transports: [
-    new winston.transports.Console({
-      level: 'debug',
-      handleExceptions: true,
-      json: false,
-      colorize: true
-    })
-  ]
-});
+const logger = require('./logger');
 
 function makeRequest(config, body) {
   if (!body || !config) {
@@ -93,7 +82,6 @@ function readConfig(config, key) {
 }
 
 module.exports = {
-  logger,
   makeRequest,
   readConfig
 };

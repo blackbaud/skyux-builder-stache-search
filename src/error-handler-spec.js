@@ -1,5 +1,5 @@
 const mock = require('mock-require');
-const logger = require('./utils/shared').logger;
+const logger = require('./utils/logger');
 
 describe('Error Handler', () => {
   let errorHandler = require('./error-handler');
