@@ -1,18 +1,18 @@
 const btoa = require('btoa');
 const request = require('request');
+const winston = require('winston');
 const errorHandler = require('../error-handler');
 
-function readConfig(config, key) {
-  if (
-    config &&
-    config.appSettings &&
-    config.appSettings.stache &&
-    config.appSettings.stache.searchConfig
-  ) {
-      return config.appSettings.stache.searchConfig[key];
-  }
-  return undefined;
-}
+const logger = new winston.Logger({
+  transports: [
+    new winston.transports.Console({
+      level: 'debug',
+      handleExceptions: true,
+      json: false,
+      colorize: true
+    })
+  ]
+});
 
 function makeRequest(config, body) {
   if (!body || !config) {
@@ -64,7 +64,7 @@ function makeRequest(config, body) {
         })
         .on('response', response => {
           if (response.statusCode === 200) {
-            return console.log(`${response.statusCode}: Search data successfully posted!`);
+            return logger.info(`${response.statusCode}: Search data successfully posted!`);
           }
 
           let data = '';
@@ -80,7 +80,20 @@ function makeRequest(config, body) {
     });
 }
 
+function readConfig(config, key) {
+  if (
+    config &&
+    config.appSettings &&
+    config.appSettings.stache &&
+    config.appSettings.stache.searchConfig
+  ) {
+    return config.appSettings.stache.searchConfig[key];
+  }
+  return undefined;
+}
+
 module.exports = {
+  logger,
   makeRequest,
   readConfig
 };

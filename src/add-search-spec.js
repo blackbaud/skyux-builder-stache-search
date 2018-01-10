@@ -141,6 +141,8 @@ describe('Search Results', () => {
           return pageContent;
         })
         .catch((error: any) => {
+          // The e2e test will fail if we don't handle these errors properly. Certain pages may not have a
+          // Stache tag or a heading. We don't want the scraper to fail the build in this case.
           if (error.name === 'NoSuchElementError') {
             console.log(
               'Must have the <stache> tag and a pageTitle on page '
@@ -148,6 +150,9 @@ describe('Search Results', () => {
             );
             return pageContent;
           } else if (error.message.indexOf('Angular could not be found on the page') > -1) {
+            // Same theory here. Some pages, such as ones that redirect to other sites, may cause an 
+            // Angular not found on page error. In this case, we just want to skip the page and move
+            // on rather than failing the build.
             console.log('Angular not found on page ' + file + '. Skipping.');
             return pageContent;
           } else {

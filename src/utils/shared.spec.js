@@ -5,6 +5,31 @@ const EventEmitter = require('events').EventEmitter;
 const IncomingMessage = require('http').IncomingMessage;
 
 describe('Utils', () => {
+  afterEach(() => {
+    mock.stopAll();
+  });
+
+  describe('Utils.logger', () => {
+    it('should configure a custom transport', () => {
+      let _transports;
+      let _colorize = false;
+      mock('winston', {
+        Logger: function (opts) {
+          _transports = opts.transports;
+        },
+        transports: {
+          Console: function (opts) {
+            _colorize = opts.colorize;
+          }
+        }
+      });
+
+      mock.reRequire('./shared').logger;
+      expect(_colorize).toEqual(true);
+      expect(_transports).toBeDefined();
+    });
+  });
+
   describe('Utils.readConfig', () => {
     let config = {
       appSettings: {
@@ -80,7 +105,11 @@ describe('Utils', () => {
 
     it('should post the json file', () => {
       let authCredentials = btoa(`${args.clientUserName}:${args.clientKey}`);
+      let shared = mock.reRequire('./shared');
+      let logger = shared.logger;
+      makeRequest = shared.makeRequest;
       spyOn(console, 'log');
+      spyOn(logger, 'info');
       makeRequest(args, body);
       emitter.emit('data', new Buffer(JSON.stringify({
         access_token: 'test'
@@ -94,7 +123,7 @@ describe('Utils', () => {
       expect(console.log).toHaveBeenCalledWith('Bearer test');
       expect(console.log).toHaveBeenCalledWith(`Basic ${authCredentials}`);
       expect(console.log).toHaveBeenCalledWith(JSON.stringify({ test: 'test-body' }));
-      expect(console.log).toHaveBeenCalledWith('200: Search data successfully posted!');
+      expect(logger.info).toHaveBeenCalledWith('200: Search data successfully posted!');
     });
 
     it('should throw an error if the authentication post was unsuccessful', () => {

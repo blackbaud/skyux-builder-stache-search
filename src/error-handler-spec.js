@@ -1,4 +1,5 @@
 const mock = require('mock-require');
+const logger = require('./utils/shared').logger;
 
 describe('Error Handler', () => {
   let errorHandler = require('./error-handler');
@@ -10,16 +11,18 @@ describe('Error Handler', () => {
     mock('./remove-search-spec', function (args, config) {
       console.log(`Remove Search Spec Called ${args} ${config}`);
     });
+
+    errorHandler = mock.reRequire('./error-handler');
   });
 
   it('should log the error', () => {
-    spyOn(console, 'error');
+    spyOn(logger, 'error');
     let test = function () {
       return errorHandler('Error!', 'Config');
     };
 
     expect(test).toThrow('Error!');
-    expect(console.error).toHaveBeenCalledWith('Error!');
+    expect(logger.error).toHaveBeenCalledWith('Error!');
   });
 
   it('should call the remove-search-json and remove-search-spec functions', () => {
