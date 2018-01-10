@@ -1,3 +1,6 @@
+# 1.4.0 (1-10-18)
+- Converted logging from console to Winston.
+
 # 1.3.3 (12-18-17)
 - Updated e2e spec file to filter out pages with no text content.
 
