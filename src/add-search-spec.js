@@ -20,7 +20,7 @@ import { browser, element, by } from 'protractor';
 // Use SkyHostBrowser to access your locally served SPA
 import { SkyHostBrowser } from '@blackbaud/skyux-builder/runtime/testing/e2e';
 
-const fs = require('fs');
+const fs = require('fs-extra');
 const path = require('path');
 
 const mapFilePaths = (config: any) => {
@@ -177,9 +177,7 @@ describe('Search Results', () => {
           return (page.text !== undefined && page.text !== '');
         });
 
-        if (!fs.existsSync(searchDirPath)) {
-          fs.mkdirSync(searchDirPath);
-        }
+        fs.ensureDirSync(searchDirPath);
         return writeSearchFile(searchDirPath);
       })
       .then(() => done())
