@@ -1,5 +1,8 @@
+# 1.4.3 (1-17-18)
+- Fixed issue with missing stache directory check in e2e spec. [#19](https://github.com/blackbaud/skyux-builder-stache-search/pull/19)
+
 # 1.4.2 (1-10-18)
-- Fixed issue with logger and errorHandler[#17](https://github.com/blackbaud/skyux-builder-stache-search/pull/15)
+- Fixed issue with logger and errorHandler[#17](https://github.com/blackbaud/skyux-builder-stache-search/pull/17)
 
 # 1.4.1 (1-10-18)
 - Fixed trailing whitespace in e2e template[#15](https://github.com/blackbaud/skyux-builder-stache-search/pull/15)
