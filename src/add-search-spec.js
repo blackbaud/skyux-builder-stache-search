@@ -177,9 +177,7 @@ describe('Search Results', () => {
           return (page.text !== undefined && page.text !== '');
         });
 
-        if (!fs.existsSync(searchDirPath)) {
-          fs.mkdirSync(searchDirPath);
-        }
+        fs.ensureDirSync(searchDirPath);
         return writeSearchFile(searchDirPath);
       })
       .then(() => done())
