@@ -21,7 +21,7 @@ Add `searchConfig` to the `stache` object in your `skyuxconfig.json` file's `app
     "searchConfig": {
       "allowSiteToBeSearched": true,
       "is_internal": true,
-      "site_names": ['stache2'],
+      "site_names": ['stache2']
     }
   }
 }
