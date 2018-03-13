@@ -127,7 +127,9 @@ describe('Search Results', () => {
       let pageContent: any = {
         host: url,
         site_name: siteName,
-        path: file
+        path: file,
+        is_internal: searchConfig.is_internal,
+        is_globally_searchable: searchConfig.is_globally_searchable
       };
 
       return SkyHostBrowser
