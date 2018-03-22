@@ -81,7 +81,7 @@ describe('Search Results', () => {
   }
 
   beforeEach(() => {
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 500000;
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = 1000000;
   });
 
   it('should generate search results', (done) => {
