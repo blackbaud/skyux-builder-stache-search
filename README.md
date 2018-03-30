@@ -21,7 +21,8 @@ Add `searchConfig` to the `stache` object in your `skyuxconfig.json` file's `app
     "searchConfig": {
       "allowSiteToBeSearched": true,
       "is_internal": true,
-      "site_names": ['stache2']
+      "site_names": ['stache2'],
+      "is_globally_searchable": true
     }
   }
 }
@@ -38,6 +39,10 @@ This setting indicates whether a Stache site is internal only or not. The defaul
 ### site_names
 
 This setting determines which Stache sites should be included in the search results. The default is only the site you are currently on. If you add other site names to the array, it will add those sites' contents to the searchable content.
+
+### is_globally_searchable
+
+This setting determines whether the site will be included on the global search page.  The default is set `true`, allowing your sites content to appear on the global [stache search](https://docs.blackbaud.com/docs-search/). If set to `false`, your site content will only be searchable when queried directly.
 
 ## Found an issue?
 
