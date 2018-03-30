@@ -1,3 +1,6 @@
+# 1.4.4 (3-20-18)
+- Updated timeout for e2e spec. [#23](https://github.com/blackbaud/skyux-builder-stache-search/pull/23)
+
 # 1.4.3 (1-17-18)
 - Fixed issue with missing stache directory check in e2e spec. [#19](https://github.com/blackbaud/skyux-builder-stache-search/pull/19)
 
