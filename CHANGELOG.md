@@ -1,3 +1,6 @@
+# 1.5.0 (3-20-18)
+- Added feature to disallow site to appear on the global search. [#22](https://github.com/blackbaud/skyux-builder-stache-search/pull/22)
+
 # 1.4.4 (3-20-18)
 - Updated timeout for e2e spec. [#23](https://github.com/blackbaud/skyux-builder-stache-search/pull/23)
 
