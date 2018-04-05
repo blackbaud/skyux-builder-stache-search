@@ -1,3 +1,6 @@
+# 1.5.1 (3-20-18)
+- Fixed an issue that caused whitespace to be added to the generated e2e files, causing builds to fail. [#26](https://github.com/blackbaud/skyux-builder-stache-search/pull/26)
+
 # 1.5.0 (3-20-18)
 - Added feature to disallow site to appear on the global search. [#22](https://github.com/blackbaud/skyux-builder-stache-search/pull/22)
 
