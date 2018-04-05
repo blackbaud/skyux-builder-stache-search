@@ -58,11 +58,11 @@ const initSearchConfig = (config: any, siteName: string): any => {
   if (doesSearchConfigExist) {
     let searchConfig = config.skyux.appSettings.stache.searchConfig;
     result.site_names = searchConfig.site_names || result.site_names;
-    result.is_internal = searchConfig.is_internal !== undefined ? 
-      searchConfig.is_internal 
+    result.is_internal = searchConfig.is_internal !== undefined ?
+      searchConfig.is_internal
       : result.is_internal;
     result.is_globally_searchable = searchConfig.is_globally_searchable !== undefined ?
-      searchConfig.is_globally_searchable  
+      searchConfig.is_globally_searchable
       : result.is_globally_searchable;
   }
 
