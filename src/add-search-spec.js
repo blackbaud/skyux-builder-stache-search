@@ -132,8 +132,19 @@ describe('Search Results', () => {
         is_globally_searchable: searchConfig.is_globally_searchable
       };
 
-      return SkyHostBrowser
-        .get(file, 3000)
+      return browser
+        .executeScript(
+          \`window.postMessage({ messageType: 'navigate', url: ['${file}'] }, '*')\`
+        )
+        .then(() => browser.getCurrentUrl())
+        .then((currentUrl) => {
+          if (currentUrl.indexOf(file) === -1) {
+            console.warn(
+              'Newer version of SKY UX Builder drastically decreases this test time.'
+            );
+            return SkyHostBrowser.get(file, 3000);
+          }
+        })
         .then(() => {
           return browser.executeScript(removeUnnecessaryElements);
         })
@@ -168,6 +179,8 @@ describe('Search Results', () => {
           }
         });
     }
+
+    SkyHostBrowser.get('/', 3000);
 
     Promise.all(files.map(file => {
       return scrapePageContent(file);
