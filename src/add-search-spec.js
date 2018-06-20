@@ -134,7 +134,7 @@ describe('Search Results', () => {
 
       return browser
         .executeScript(
-          \`window.postMessage({ messageType: 'navigate-e2e', url: ['\${file}'] }, '*')\`
+          \`window.postMessage({ messageType: 'sky-navigate-e2e', url: ['\${file}'] }, '*')\`
         )
         .then(() => browser.getCurrentUrl())
         .then((currentUrl) => {
