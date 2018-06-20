@@ -1,3 +1,6 @@
+# 1.6.0 (6-20-18)
+- Added the ability to use Angular's router to navigate between routes. [#28](https://github.com/blackbaud/skyux-builder-stache-search/pull/28)
+
 # 1.5.1 (3-20-18)
 - Fixed an issue that caused whitespace to be added to the generated e2e files, causing builds to fail. [#26](https://github.com/blackbaud/skyux-builder-stache-search/pull/26)
 
