@@ -182,6 +182,8 @@ describe('Search Results', () => {
         });
     }
 
+    console.log('Scraping ' + files.length + ' files');
+
     SkyHostBrowser
       .get('/', 3000)
       .then(() => browser.waitForAngularEnabled(false))
