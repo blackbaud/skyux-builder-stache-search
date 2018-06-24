@@ -137,7 +137,7 @@ describe('Search Results', () => {
           \`window.postMessage({ messageType: 'sky-navigate-e2e', url: ['\${file}'] }, '*')\`
         )
         .then(() => browser.getCurrentUrl())
-        .then((currentUrl) => {
+        .then((currentUrl: string) => {
           if (currentUrl.indexOf(file) === -1) {
             console.warn(
               'Newer version of SKY UX Builder drastically decreases this test time.'
@@ -153,7 +153,9 @@ describe('Search Results', () => {
         })
         .then((text: string) => {
           pageContent['text'] = text.replace(/\\n/g, ' ');
-          return element(by.css('.stache-page-title, .stache-tutorial-heading, h1')).getText();
+          return element.all(by.css('.stache-page-title, .stache-tutorial-heading, h1'))
+            .first()
+            .getText();
         })
         .then((text: string) => {
           pageContent['title'] = text;
@@ -182,6 +184,7 @@ describe('Search Results', () => {
 
     SkyHostBrowser
       .get('/', 3000)
+      .then(() => browser.waitForAngularEnabled(false))
       .then(() => Promise.all(files.map(file => {
         return scrapePageContent(file);
       }))
