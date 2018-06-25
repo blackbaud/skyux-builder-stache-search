@@ -1,3 +1,6 @@
+# 1.6.1 (6-20-25)
+- Disabled waiting for Angular. [#30](https://github.com/blackbaud/skyux-builder-stache-search/pull/30)
+
 # 1.6.0 (6-20-18)
 - Added the ability to use Angular's router to navigate between routes. [#28](https://github.com/blackbaud/skyux-builder-stache-search/pull/28)
 
