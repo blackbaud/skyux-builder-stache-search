@@ -1,4 +1,7 @@
-# 1.6.1 (6-20-25)
+# 1.7.0 (11-29-18)
+- Added ability for users to omit content from Stache Search results. [#32](https://github.com/blackbaud/skyux-builder-stache-search/pull/32)
+
+# 1.6.1 (6-20-18)
 - Disabled waiting for Angular. [#30](https://github.com/blackbaud/skyux-builder-stache-search/pull/30)
 
 # 1.6.0 (6-20-18)
