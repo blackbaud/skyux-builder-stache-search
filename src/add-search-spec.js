@@ -75,7 +75,7 @@ describe('Search Results', () => {
   function removeUnnecessaryElements() {
     Array.from(
       document.querySelectorAll(
-        '.stache-sidebar, .stache-breadcrumbs, .stache-table-of-contents'
+        '.stache-sidebar, .stache-breadcrumbs, .stache-table-of-contents, stache-hide-from-search'
       )
     ).forEach(el => el.remove());
   }
