@@ -80,6 +80,18 @@ describe('Search Results', () => {
     ).forEach(el => el.remove());
   }
 
+  let internalOnlyContent: string[] = [];
+  function storeInternalOnlyContent() {
+    Array.from(
+      document.querySelectorAll(
+        'stache-internal, skyux-restricted-view, .skyux-restricted-view'
+      )
+    ).forEach((el: HTMLElement) => {
+      internalOnlyContent.push(el.innerText);
+      el.remove();
+    });
+  }
+
   beforeEach(() => {
     jasmine.DEFAULT_TIMEOUT_INTERVAL = 1000000;
   });
@@ -132,6 +144,8 @@ describe('Search Results', () => {
         is_globally_searchable: searchConfig.is_globally_searchable
       };
 
+      let pageContentList: any[] = [];
+
       return browser
         .executeScript(
           \`window.postMessage({ messageType: 'sky-navigate-e2e', url: ['\${file}'] }, '*')\`
@@ -149,17 +163,39 @@ describe('Search Results', () => {
           return browser.executeScript(removeUnnecessaryElements);
         })
         .then(() => {
-          return element(by.css('.stache-wrapper')).getText();
+          return browser.executeScript(storeInternalOnlyContent);
         })
-        .then((text: string) => {
-          pageContent['text'] = text.replace(/\\n/g, ' ');
-          return element.all(by.css('.stache-page-title, .stache-tutorial-heading, h1'))
-            .first()
-            .getText();
+        .then(() => {
+          return element(by.css('.stache-wrapper'))
+          .getText()
+          .then(text => {
+            pageContent['text'] = text.replace(/\\n/g, ' ');
+
+            const title = element.all(by.css('.stache-page-title, .stache-tutorial-heading, h1'))
+              .first()
+              .getText();
+
+            pageContent['title'] = title;
+            pageContentList.push(pageContent);
+            return;
+          });
         })
-        .then((text: string) => {
-          pageContent['title'] = text;
-          return pageContent;
+        .then(() => {
+          if (internalOnlyContent.length) {
+            const text = internalOnlyContent.join('\\n');
+
+            pageContent['text'] = text.replace(/\\n/g, ' ');
+
+            const title = element.all(by.css('.stache-page-title, .stache-tutorial-heading, h1'))
+              .first()
+              .getText();
+
+            pageContent['title'] = title;
+            pageContent['is_internal'] = true;
+            pageContent['site_name'] = pageContent['site_name'] + '-internal-view';
+            pageContentList.push(pageContent);
+          }
+          return pageContentList;
         })
         .catch((error: any) => {
           // The e2e test will fail if we don't handle these errors properly. Certain pages may not have a
@@ -187,6 +223,9 @@ describe('Search Results', () => {
     SkyHostBrowser
       .get('/', 3000)
       .then(() => browser.waitForAngularEnabled(false))
+      .then(() => Promise.all(files.map(file => {
+        return scrapePageContent(file);
+      }))
       .then(() => Promise.all(files.map(file => {
         return scrapePageContent(file);
       }))
