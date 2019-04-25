@@ -225,9 +225,6 @@ describe('Search Results', () => {
       .then(() => Promise.all(files.map(file => {
         return scrapePageContent(file);
       }))
-      .then(() => Promise.all(files.map(file => {
-        return scrapePageContent(file);
-      }))
       .then(pageContents => {
         let searchDirPath = path.join(
           __dirname,
@@ -253,7 +250,7 @@ describe('Search Results', () => {
         console.log('ERROR', error);
         expect(error).toBeNull();
         done();
-      })));
+      }));
   });
 });
 `;
