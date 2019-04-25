@@ -76,7 +76,7 @@ describe('Search Results', () => {
   function removeUnnecessaryElements() {
     Array.from(
       document.querySelectorAll(
-        '.stache-sidebar, .stache-breadcrumbs, .stache-table-of-contents, stache-hide-from-search' +
+        '.stache-sidebar, .stache-breadcrumbs, .stache-table-of-contents, stache-hide-from-search,' +
         'stache-internal, skyux-restricted-view, .skyux-restricted-view'
       )
     ).forEach(el => el.remove());
@@ -195,6 +195,8 @@ describe('Search Results', () => {
           return result;
         })
         .catch((error: any) => {
+          const result = pageContentList.concat(pageInternalContentList);
+
           // The e2e test will fail if we don't handle these errors properly. Certain pages may not have a
           // Stache tag or a heading. We don't want the scraper to fail the build in this case.
           if (error.name === 'NoSuchElementError') {
@@ -202,13 +204,13 @@ describe('Search Results', () => {
               'Must have the <stache> tag and a pageTitle on page '
               + file + ' to scrape content.'
             );
-            return pageContent;
+            return result;
           } else if (error.message.indexOf('Angular could not be found on the page') > -1) {
             // Same theory here. Some pages, such as ones that redirect to other sites, may cause an
             // Angular not found on page error. In this case, we just want to skip the page and move
             // on rather than failing the build.
             console.log('Angular not found on page ' + file + '. Skipping.');
-            return pageContent;
+            return result;
           } else {
             throw new Error(error);
           }
