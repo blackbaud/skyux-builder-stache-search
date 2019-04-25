@@ -164,19 +164,18 @@ describe('Search Results', () => {
           return browser.executeScript(removeUnnecessaryElements);
         })
         .then(() => {
-          return element(by.css('.stache-wrapper'))
-          .getText()
-          .then(text => {
-            pageContent['text'] = text.replace(/\\n/g, ' ');
+          return element(by.css('.stache-wrapper')).getText();
+        })
+        .then(text => {
+          pageContent['text'] = text.replace(/\\n/g, ' ');
 
-            return element.all(by.css('.stache-page-title, .stache-tutorial-heading, h1'))
-              .first()
-              .getText()
-              .then(title => {
-                pageContent['title'] = title;
-                pageContentList.push(pageContent);
-              });
-          });
+          return element.all(by.css('.stache-page-title, .stache-tutorial-heading, h1'))
+            .first()
+            .getText();
+        })
+        .then(title => {
+          pageContent['title'] = title;
+          pageContentList.push(pageContent);
         })
         .then(() => {
           const pc = Object.assign({}, pageContent);
