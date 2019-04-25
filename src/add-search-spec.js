@@ -151,7 +151,7 @@ describe('Search Results', () => {
           }
         })
         .then(() => {
-          if(!pageContent['is_internal']) {
+          if (!pageContent['is_internal']) {
             return element.all(by.css('stache-internal, skyux-restricted-view, .skyux-restricted-view'))
             .each(el => {
               return el.getText().then(text => {
@@ -167,7 +167,7 @@ describe('Search Results', () => {
           return element(by.css('.stache-wrapper'))
           .getText()
           .then(text => {
-            pageContent['text'] = text.replace(/\n/g, ' ');
+            pageContent['text'] = text.replace(/\\n/g, ' ');
 
             return element.all(by.css('.stache-page-title, .stache-tutorial-heading, h1'))
               .first()
@@ -180,11 +180,11 @@ describe('Search Results', () => {
         })
         .then(() => {
           const pc = Object.assign({}, pageContent);
-          const text = internalOnlyContent.join('\n');
+          const text = internalOnlyContent.join('\\n');
           internalOnlyContent = [];
           if (text && !pc['is_internal']) {
             pc['text'] = text;
-            pc['is_internal'] = true;;
+            pc['is_internal'] = true;
             pageInternalContentList.push(pc);
           }
         })
@@ -235,8 +235,12 @@ describe('Search Results', () => {
           'search'
         );
 
-        content.stache_page_search_data = pageContents.filter((page: any) => {
-          return (page.text !== undefined && page.text !== '');
+        pageContents.forEach((page: any) => {
+          page.filter((scrapedContent: any) => {
+            return (scrapedContent.text !== undefined && scrapedContent.text !== '');
+          }).forEach((entry: any) => {
+            content.stache_page_search_data.push(entry);
+          });
         });
 
         fs.ensureDirSync(searchDirPath);
