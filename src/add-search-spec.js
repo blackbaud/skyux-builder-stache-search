@@ -77,7 +77,7 @@ describe('Search Results', () => {
     Array.from(
       document.querySelectorAll(
         '.stache-sidebar, .stache-breadcrumbs, .stache-table-of-contents, stache-hide-from-search,' +
-        'stache-internal, skyux-restricted-view, .skyux-restricted-view'
+        'skyux-restricted-view, .skyux-restricted-view'
       )
     ).forEach(el => el.remove());
   }
@@ -152,7 +152,7 @@ describe('Search Results', () => {
         })
         .then(() => {
           if (!pageContent['is_internal']) {
-            return element.all(by.css('stache-internal, skyux-restricted-view, .skyux-restricted-view'))
+            return element.all(by.css('skyux-restricted-view, .skyux-restricted-view'))
             .each(el => {
               return el.getText().then(text => {
                 internalOnlyContent.push(text);
