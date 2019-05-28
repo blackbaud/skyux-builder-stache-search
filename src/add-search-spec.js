@@ -18,7 +18,7 @@ function addSearchSpecToProject(argv, config) {
 import { browser, element, by } from 'protractor';
 
 // Use SkyHostBrowser to access your locally served SPA
-import { SkyHostBrowser } from '@blackbaud/skyux-builder/runtime/testing/e2e';
+import { SkyHostBrowser } from '@skyux-sdk/e2e';
 
 const fs = require('fs-extra');
 const path = require('path');

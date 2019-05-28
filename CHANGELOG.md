@@ -1,3 +1,6 @@
+# 2.0.0 (05-22-19)
+- Updated import path for `SkyHostBrowser` from `@blackbaud/skyux-builder` to `@skyux-sdk/e2e`. [#35](https://github.com/blackbaud/skyux-builder-stache-search/pull/35)
+
 # 1.7.0 (11-29-18)
 - Added ability for users to omit content from Stache Search results. [#32](https://github.com/blackbaud/skyux-builder-stache-search/pull/32)
 
