@@ -71,11 +71,13 @@ const initSearchConfig = (config: any, siteName: string): any => {
 
 describe('Search Results', () => {
   let files: string[];
+  let internalOnlyContent: string[] = [];
 
   function removeUnnecessaryElements() {
     Array.from(
       document.querySelectorAll(
-        '.stache-sidebar, .stache-breadcrumbs, .stache-table-of-contents, stache-hide-from-search'
+        '.stache-sidebar, .stache-breadcrumbs, .stache-table-of-contents, stache-hide-from-search,' +
+        'skyux-restricted-view, .skyux-restricted-view'
       )
     ).forEach(el => el.remove());
   }
@@ -132,6 +134,9 @@ describe('Search Results', () => {
         is_globally_searchable: searchConfig.is_globally_searchable
       };
 
+      let pageContentList: any[] = [];
+      let pageInternalContentList: any[] = [];
+
       return browser
         .executeScript(
           \`window.postMessage({ messageType: 'sky-navigate-e2e', url: ['\${file}'] }, '*')\`
@@ -146,22 +151,51 @@ describe('Search Results', () => {
           }
         })
         .then(() => {
+          if (!pageContent['is_internal']) {
+            return element.all(by.css('skyux-restricted-view, .skyux-restricted-view'))
+            .each(el => {
+              return el.getText().then(text => {
+                internalOnlyContent.push(text);
+              });
+            });
+          }
+        })
+        .then(() => {
           return browser.executeScript(removeUnnecessaryElements);
         })
         .then(() => {
           return element(by.css('.stache-wrapper')).getText();
         })
-        .then((text: string) => {
+        .then(text => {
           pageContent['text'] = text.replace(/\\n/g, ' ');
+
           return element.all(by.css('.stache-page-title, .stache-tutorial-heading, h1'))
             .first()
             .getText();
         })
-        .then((text: string) => {
-          pageContent['title'] = text;
-          return pageContent;
+        .then(title => {
+          pageContent['title'] = title;
+          pageContentList.push(pageContent);
+        })
+        .then(() => {
+          const pc = Object.assign({}, pageContent);
+          const text = internalOnlyContent.join('\\n');
+          internalOnlyContent = [];
+          if (text && !pc['is_internal']) {
+            pc['text'] = text;
+            pc['is_internal'] = true;
+            pageInternalContentList.push(pc);
+          }
+        })
+        .then(() => {
+          const result = pageContentList.concat(pageInternalContentList);
+          pageContentList = [];
+          pageInternalContentList = [];
+          return result;
         })
         .catch((error: any) => {
+          const result = pageContentList.concat(pageInternalContentList);
+
           // The e2e test will fail if we don't handle these errors properly. Certain pages may not have a
           // Stache tag or a heading. We don't want the scraper to fail the build in this case.
           if (error.name === 'NoSuchElementError') {
@@ -169,13 +203,13 @@ describe('Search Results', () => {
               'Must have the <stache> tag and a pageTitle on page '
               + file + ' to scrape content.'
             );
-            return pageContent;
+            return result;
           } else if (error.message.indexOf('Angular could not be found on the page') > -1) {
             // Same theory here. Some pages, such as ones that redirect to other sites, may cause an
             // Angular not found on page error. In this case, we just want to skip the page and move
             // on rather than failing the build.
             console.log('Angular not found on page ' + file + '. Skipping.');
-            return pageContent;
+            return result;
           } else {
             throw new Error(error);
           }
@@ -199,8 +233,12 @@ describe('Search Results', () => {
           'search'
         );
 
-        content.stache_page_search_data = pageContents.filter((page: any) => {
-          return (page.text !== undefined && page.text !== '');
+        pageContents.forEach((page: any) => {
+          page.filter((scrapedContent: any) => {
+            return (scrapedContent.text !== undefined && scrapedContent.text !== '');
+          }).forEach((entry: any) => {
+            content.stache_page_search_data.push(entry);
+          });
         });
 
         fs.ensureDirSync(searchDirPath);
