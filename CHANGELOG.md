@@ -1,3 +1,6 @@
+# 2.1.0 (07-22-19)
+- Updated scraping logic to separate internal only content from external content. [#34](https://github.com/blackbaud/skyux-builder-stache-search/pull/34)
+
 # 2.0.0 (05-22-19)
 - Updated import path for `SkyHostBrowser` from `@blackbaud/skyux-builder` to `@skyux-sdk/e2e`. [#35](https://github.com/blackbaud/skyux-builder-stache-search/pull/35)
 
