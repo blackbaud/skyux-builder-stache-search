@@ -114,7 +114,7 @@ describe('Search Results', () => {
     };
 
     function writeSearchFile(searchDirPath: string) {
-      return new Promise((resolve, reject) => {
+      return new Promise<void>((resolve, reject) => {
         fs.writeFile(
           path.join(searchDirPath, 'search.json'),
           JSON.stringify(content),
@@ -149,16 +149,18 @@ describe('Search Results', () => {
             );
             return SkyHostBrowser.get(file, 3000);
           }
+          return;
         })
         .then(() => {
           if (!pageContent['is_internal']) {
             return element.all(by.css('skyux-restricted-view, .skyux-restricted-view'))
             .each(el => {
-              return el.getText().then(text => {
+              return el?.getText().then(text => {
                 internalOnlyContent.push(text);
               });
             });
           }
+          return;
         })
         .then(() => {
           return browser.executeScript(removeUnnecessaryElements);
