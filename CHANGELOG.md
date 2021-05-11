@@ -1,3 +1,8 @@
+# 2.2.0 (05-11-21)
+
+- Upgraded the dependencies to address some security vulnerabilities. [#43](https://github.com/blackbaud/skyux-builder-stache-search/pull/43)
+- Fixed the injected e2e script to work with TypeScript "strict" mode. [#43](https://github.com/blackbaud/skyux-builder-stache-search/pull/43)
+
 # 2.1.0 (07-22-19)
 - Updated scraping logic to separate internal only content from external content. [#34](https://github.com/blackbaud/skyux-builder-stache-search/pull/34)
 
