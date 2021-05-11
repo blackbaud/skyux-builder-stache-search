@@ -21,3 +21,4 @@ jobs:
         npm ci
         npm test
         bash <(curl -s https://codecov.io/bash)
+        npm run build

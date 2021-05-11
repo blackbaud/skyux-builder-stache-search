@@ -9,29 +9,20 @@ const rootPath = path.join(__dirname, '..');
 const distPath = path.join(rootPath, 'dist');
 
 function createDist() {
-  return new Promise((resolve, reject) => {
-    rimraf(distPath, {}, () => {
-      mkdirp(path.join(distPath, 'src'), (err) => {
-        if (err) {
-          reject(err);
-            return;
-          }
+  rimraf.sync(distPath);
+  mkdirp.sync(path.join(distPath, 'src'));
 
-        fs.copySync(
-          path.join(rootPath, 'src'),
-          path.join(distPath, 'src'),
-          {
-            filter: (src) => {
-              const isSpecFile = (src.match(/\.spec\.js$/));
-              const isHelpersDir = (src.match(/helpers/));
-              return (!isSpecFile && !isHelpersDir);
-            }
-          }
-        );
-        resolve();
-      });
-    });
-  });
+  fs.copySync(
+    path.join(rootPath, 'src'),
+    path.join(distPath, 'src'),
+    {
+      filter: (src) => {
+        const isSpecFile = (src.match(/\.spec\.js$/));
+        const isHelpersDir = (src.match(/helpers/));
+        return (!isSpecFile && !isHelpersDir);
+      }
+    }
+  );
 }
 
 function makePackageFileForDist() {
@@ -50,8 +41,6 @@ function copyFilesToDist() {
   fs.copySync(path.join(rootPath, 'CHANGELOG.md'), path.join(distPath, 'CHANGELOG.md'));
 }
 
-createDist()
-  .then(() => {
-      makePackageFileForDist();
-      copyFilesToDist();
-  });
+createDist();
+makePackageFileForDist();
+copyFilesToDist();
