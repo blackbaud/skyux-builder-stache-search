@@ -92,7 +92,7 @@ describe('Utils', () => {
       let authCredentials = btoa(`${args.clientUserName}:${args.clientKey}`);
       spyOn(console, 'log');
       makeRequest(args, body);
-      emitter.emit('data', new Buffer(JSON.stringify({
+      emitter.emit('data', Buffer.from(JSON.stringify({
         access_token: 'test'
       })));
       emitter.emit('end');
@@ -117,7 +117,7 @@ describe('Utils', () => {
     it('should throw an error if the file post was unsuccessful', () => {
       spyOn(console, 'log');
       makeRequest(args, body);
-      emitter.emit('data', new Buffer(JSON.stringify({
+      emitter.emit('data', Buffer.from(JSON.stringify({
         access_token: 'test'
       })));
       emitter.emit('end');
@@ -132,7 +132,7 @@ describe('Utils', () => {
       response.statusMessage = 'Error response';
 
       makeRequest(args, body);
-      emitter.emit('data', new Buffer(JSON.stringify({
+      emitter.emit('data', Buffer.from(JSON.stringify({
         access_token: 'test'
       })));
       emitter.emit('end');
