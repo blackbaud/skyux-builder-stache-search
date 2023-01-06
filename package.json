@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "build": "node ./scripts/prepare-package.js",
-    "coverage": "istanbul cover -x 'src/*.spec.js' --report=html jasmine JASMINE_CONFIG_PATH=jasmine.json",
+    "coverage": "nyc npm test",
     "lint": "./node_modules/.bin/eslint src/*.js",
-    "test": "npm run lint && npm run coverage"
+    "test": "jasmine JASMINE_CONFIG_PATH=jasmine.json"
   },
   "repository": {
     "type": "git",
@@ -19,23 +19,20 @@
     "url": "https://github.com/blackbaud/stache-search/issues"
   },
   "homepage": "https://github.com/blackbaud/stache-search#readme",
-  "peerDependencies": {
-    "@skyux-sdk/e2e": "^3.0.0 | ^4.0.0"
-  },
   "devDependencies": {
-    "eslint": "4.5.0",
-    "eslint-plugin-standard": "3.0.1",
-    "istanbul": "0.4.5",
-    "jasmine": "2.7.0",
-    "jasmine-spec-reporter": "4.2.1",
+    "eslint": "8.31.0",
+    "eslint-plugin-standard": "5.0.0",
+    "jasmine": "4.3.0",
+    "jasmine-spec-reporter": "7.0.0",
     "mkdirp": "1.0.4",
-    "mock-require": "2.0.2",
-    "rimraf": "2.6.1"
+    "mock-require": "3.0.3",
+    "nyc": "15.1.0",
+    "rimraf": "3.0.2"
   },
   "dependencies": {
+    "@blackbaud/skyux-logger": "1.2.2",
     "btoa": "1.2.1",
-    "fs-extra": "10.0.0",
-    "request": "2.88.2",
-    "winston": "2.4.5"
+    "fs-extra": "11.1.0",
+    "request": "2.88.2"
   }
 }

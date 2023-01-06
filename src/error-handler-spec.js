@@ -1,5 +1,5 @@
 const mock = require('mock-require');
-const logger = require('./utils/logger');
+const logger = require('@blackbaud/skyux-logger');
 
 describe('Error Handler', () => {
   let errorHandler = require('./error-handler');
@@ -16,6 +16,7 @@ describe('Error Handler', () => {
   });
 
   it('should log the error', () => {
+    spyOn(console, 'log');
     spyOn(logger, 'error');
     let test = function () {
       return errorHandler('Error!', 'Config');
@@ -27,6 +28,7 @@ describe('Error Handler', () => {
 
   it('should call the remove-search-json and remove-search-spec functions', () => {
     spyOn(console, 'log');
+    spyOn(logger, 'error');
     let test = function () {
       return errorHandler('Errors!', 'Config');
     };
