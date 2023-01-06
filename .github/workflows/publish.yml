@@ -9,18 +9,18 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Set output
       id: vars
       run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
     # Setup .npmrc file to publish to npm
-    - uses: actions/setup-node@v2
+    - uses: actions/setup-node@v3
       with:
-        node-version: '14.x'
+        node-version: '14.20.0'
         registry-url: 'https://registry.npmjs.org'
     - name: Install
       run: |
-        npm install
+        npm ci
     - name: Publish
       run: |
         npm run build
