@@ -7,15 +7,15 @@ const errorHandler = require('./error-handler');
 
 function addE2EConfig(argv, config) {
   if (utils.readConfig(config, 'allowSiteToBeSearched') === false) {
-    return; 
+    return;
   }
 
   let e2eConfig = {
     omnibar: false,
     // Need to make sure the host is in here, otherwise the e2e will redirect to login even when auth is disabled.
     host: {
-      url: 'https://host.nxt.blackbaud.com'
-    }
+      url: 'https://host.nxt.blackbaud.com',
+    },
   };
 
   try {
@@ -24,7 +24,12 @@ function addE2EConfig(argv, config) {
       fs.writeJsonSync(filePath, e2eConfig);
     }
   } catch (error) {
-    return errorHandler(new Error('[ERROR]: Unable to add stache search template to e2e directory.'), config);
+    return errorHandler(
+      new Error(
+        '[ERROR]: Unable to add stache search template to e2e directory.'
+      ),
+      config
+    );
   }
 }
 

@@ -9,7 +9,7 @@ describe('Index', () => {
     mock('path', {
       join: function () {
         return './src/fixtures/mock-config.json';
-      }
+      },
     });
   });
 
@@ -26,36 +26,36 @@ describe('Index', () => {
     const cmds = {
       'stache-add-search-spec': {
         cmd: 'stache-add-search-spec',
-        lib: 'add-search-spec'
+        lib: 'add-search-spec',
       },
       'stache-add-e2e-config': {
         cmd: 'stache-add-e2e-config',
-        lib: 'add-e2e-config'
+        lib: 'add-e2e-config',
       },
       'stache-publish-search': {
         cmd: 'stache-publish-search',
-        lib: 'publish-search'
+        lib: 'publish-search',
       },
       'stache-release-search': {
         cmd: 'stache-release-search',
-        lib: 'release-search'
+        lib: 'release-search',
       },
       'stache-remove-e2e-config': {
         cmd: 'stache-remove-e2e-config',
-        lib: 'remove-e2e-config'
+        lib: 'remove-e2e-config',
       },
       'stache-remove-search-json': {
         cmd: 'stache-remove-search-json',
-        lib: 'remove-search-json'
+        lib: 'remove-search-json',
       },
       'stache-remove-search-spec': {
         cmd: 'stache-remove-search-spec',
-        lib: 'remove-search-spec'
+        lib: 'remove-search-spec',
       },
-      'version': {
+      version: {
         cmd: 'version',
-        lib: 'version'
-      }
+        lib: 'version',
+      },
     };
 
     Object.keys(cmds).forEach((key) => {
@@ -65,7 +65,7 @@ describe('Index', () => {
         });
       }
       index.runCommand(cmds[key].cmd, {});
-        expect(cmds[key].called).toEqual(true);
+      expect(cmds[key].called).toEqual(true);
     });
   });
 
@@ -85,17 +85,17 @@ describe('Index', () => {
     mock('path', {
       join: function () {
         return './src/fixtures/mock-config-nope.json';
-      }
+      },
     });
     mock('./add-e2e-config', (argv, config) => {
       console.log(config);
     });
-    
+
     spyOn(console, 'log');
     index = mock.reRequire('../index');
     index.runCommand('stache-add-e2e-config', {});
     expect(console.log).toHaveBeenCalledWith({});
-  });  
+  });
 
   afterAll(() => {
     mock.stopAll();

@@ -5,33 +5,34 @@ const errorHandler = require('../error-handler');
 
 function makeRequest(config, body) {
   if (!body || !config) {
-    return errorHandler(new Error('[ERROR]: A request body and config are required!'));
+    return errorHandler(
+      new Error('[ERROR]: A request body and config are required!')
+    );
   }
 
-  let {
-    audienceId,
-    clientKey,
-    clientUserName,
-    endpoint
-  } = config;
+  let { audienceId, clientKey, clientUserName, endpoint } = config;
 
   let encodedCredentials = btoa(`${clientUserName}:${clientKey}`);
 
   const sasOptions = {
     method: 'POST',
-    uri: `https://service-authorization.sky.blackbaud.com/oauth2/token?grant_type=client_credentials&audience_id=${encodeURIComponent(audienceId)}`,
+    uri: `https://service-authorization.sky.blackbaud.com/oauth2/token?grant_type=client_credentials&audience_id=${encodeURIComponent(
+      audienceId
+    )}`,
     headers: {
-      'Authorization': `Basic ${encodedCredentials}`
-    }
+      Authorization: `Basic ${encodedCredentials}`,
+    },
   };
 
   let token = [];
 
   request(sasOptions)
-    .on('error', error => {
-      return errorHandler(new Error(`[ERROR]: Unable to retrieve SAS JWT! ${error.message}`));
+    .on('error', (error) => {
+      return errorHandler(
+        new Error(`[ERROR]: Unable to retrieve SAS JWT! ${error.message}`)
+      );
     })
-    .on('data', data => {
+    .on('data', (data) => {
       token.push(data);
     })
     .on('end', () => {
@@ -42,28 +43,38 @@ function makeRequest(config, body) {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${token.access_token}`
+          Accept: 'application/json',
+          Authorization: `Bearer ${token.access_token}`,
         },
-        body: body
+        body: body,
       };
       request(publishOptions)
-        .on('error', error => {
-          errorHandler(new Error(`[ERROR]: Unable to post search data! ${error.message}`), config);
+        .on('error', (error) => {
+          errorHandler(
+            new Error(`[ERROR]: Unable to post search data! ${error.message}`),
+            config
+          );
         })
-        .on('response', response => {
+        .on('response', (response) => {
           if (response.statusCode === 200) {
-            return logger.info(`${response.statusCode}: Search data successfully posted!`);
+            return logger.info(
+              `${response.statusCode}: Search data successfully posted!`
+            );
           }
 
           let data = '';
 
-          response.on('data', chunk => {
+          response.on('data', (chunk) => {
             data += chunk;
           });
 
           response.on('end', () => {
-            errorHandler(new Error(`[ERROR]: Unable to post search data! ${response.statusCode} : ${data}`), config);
+            errorHandler(
+              new Error(
+                `[ERROR]: Unable to post search data! ${response.statusCode} : ${data}`
+              ),
+              config
+            );
           });
         });
     });
@@ -83,5 +94,5 @@ function readConfig(config, key) {
 
 module.exports = {
   makeRequest,
-  readConfig
+  readConfig,
 };

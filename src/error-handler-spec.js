@@ -33,8 +33,12 @@ describe('Error Handler', () => {
       return errorHandler('Errors!', 'Config');
     };
     expect(test).toThrow('Errors!');
-    expect(console.log).toHaveBeenCalledWith('Remove Search Json Called null Config');
-    expect(console.log).toHaveBeenCalledWith('Remove Search Spec Called null Config');
+    expect(console.log).toHaveBeenCalledWith(
+      'Remove Search Json Called null Config'
+    );
+    expect(console.log).toHaveBeenCalledWith(
+      'Remove Search Spec Called null Config'
+    );
   });
 
   afterAll(() => {

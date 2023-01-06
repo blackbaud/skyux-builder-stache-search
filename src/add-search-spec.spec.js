@@ -10,10 +10,10 @@ describe('Add Search Spec', () => {
     appSettings: {
       stache: {
         searchConfig: {
-          allowSiteToBeSearched: false
-        }
-      }
-    }
+          allowSiteToBeSearched: false,
+        },
+      },
+    },
   };
   const filePath = './e2e/stache-search.e2e-spec.ts';
 
@@ -34,19 +34,19 @@ describe('Add Search Spec', () => {
       },
       writeFileSync: function (filePath) {
         console.log(`Added ${filePath} to directory!`);
-      }
+      },
     });
 
     mock('path', {
       join: function () {
         return './e2e/stache-search.e2e-spec.ts';
-      }
+      },
     });
 
     args = {
-      siteName: 'test'
+      siteName: 'test',
     };
-    
+
     addSearchSpec = mock.reRequire('./add-search-spec');
   });
 
@@ -60,7 +60,9 @@ describe('Add Search Spec', () => {
     config.appSettings.stache.searchConfig.allowSiteToBeSearched = true;
     spyOn(console, 'log');
     addSearchSpec({}, config);
-    expect(console.log).toHaveBeenCalledWith(new Error('[ERROR]: Site name is required to add search spec!'));
+    expect(console.log).toHaveBeenCalledWith(
+      new Error('[ERROR]: Site name is required to add search spec!')
+    );
   });
 
   it('should add the file if searchConfig is undefined', () => {
@@ -89,7 +91,7 @@ describe('Add Search Spec', () => {
       },
       writeFileSync: function (filePath) {
         console.log(`Added ${filePath} to directory!`);
-      }
+      },
     });
     addSearchSpec = mock.reRequire('./add-search-spec');
     spyOn(console, 'log');
@@ -102,14 +104,18 @@ describe('Add Search Spec', () => {
     mock('path', {
       join: function () {
         throw new Error('Test error');
-      }
+      },
     });
     addSearchSpec = mock.reRequire('./add-search-spec');
     config.appSettings.stache.searchConfig.allowSiteToBeSearched = true;
     spyOn(console, 'log');
     addSearchSpec(args, config);
 
-    expect(console.log).toHaveBeenCalledWith(new Error('[ERROR]: Unable to add stache search template to e2e directory.'));
+    expect(console.log).toHaveBeenCalledWith(
+      new Error(
+        '[ERROR]: Unable to add stache search template to e2e directory.'
+      )
+    );
   });
 
   afterAll(() => {

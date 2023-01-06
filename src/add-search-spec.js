@@ -11,7 +11,10 @@ function addSearchSpecToProject(argv, config) {
   }
 
   if (!argv.siteName) {
-    return errorHandler(new Error('[ERROR]: Site name is required to add search spec!'), config);
+    return errorHandler(
+      new Error('[ERROR]: Site name is required to add search spec!'),
+      config
+    );
   }
 
   const template = `// Use browser to access other sites (that are running angular)
@@ -261,9 +264,17 @@ describe('Search Results', () => {
     if (!fs.existsSync(filePath)) {
       fs.mkdirSync(filePath);
     }
-    fs.writeFileSync(path.join(filePath, 'stache-search.e2e-spec.ts'), template);
+    fs.writeFileSync(
+      path.join(filePath, 'stache-search.e2e-spec.ts'),
+      template
+    );
   } catch (error) {
-    return errorHandler(new Error('[ERROR]: Unable to add stache search template to e2e directory.'), config);
+    return errorHandler(
+      new Error(
+        '[ERROR]: Unable to add stache search template to e2e directory.'
+      ),
+      config
+    );
   }
 }
 
