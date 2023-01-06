@@ -15,7 +15,7 @@ jobs:
         fetch-depth: 5
     - uses: actions/setup-node@v3
       with:
-        node-version: '14.20.0'
+        node-version: '16.18.1'
     - name: Install and run tests
       run: |
         npm ci
