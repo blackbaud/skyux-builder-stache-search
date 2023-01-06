@@ -51,6 +51,14 @@ This setting determines whether the site will be included on the global search p
 
 ## CLI
 
+To collect search results run:
+
+```
+ng cache clean
+// TODO: copy the karma config to the project files since its a global package.
+ng test --include=src/app/stache-search.spec.ts --no-watch --no-code-coverage --no-source-map --karma-config=node_modules/@blackbaud/skyux-builder-stache-search/karma/karma.conf.js
+```
+
 skyux stache-add-search-spec --siteName "$(SPAId)"
 skyux stache-add-e2e-config
 skyux stache-publish-search --endpoint $endpoint --audienceId $audienceId --clientUserName $clientUserName --clientKey $clientKey --buildVersion $buildVersion
