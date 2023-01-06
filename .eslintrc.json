@@ -4,9 +4,9 @@
     "standard"
   ],
   "env": {
-    "browser": true,
+    "commonjs": true,
     "node": true,
-    "es6": true,
+    "es2020": true,
     "jasmine": true
   },
   "rules": {

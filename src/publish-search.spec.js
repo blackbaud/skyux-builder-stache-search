@@ -38,7 +38,6 @@ describe('Publish Search', () => {
 
     mock('path', {
       resolve: function () {
-        console.log('We have a path!');
         return './src/stache/search.json';
       }
     });
