@@ -14,10 +14,10 @@ describe('Utils', () => {
       appSettings: {
         stache: {
           searchConfig: {
-            allowSiteToBeSearched: true
-          }
-        }
-      }
+            allowSiteToBeSearched: true,
+          },
+        },
+      },
     };
 
     it('should return the value if the key in the config exists', () => {
@@ -59,18 +59,18 @@ describe('Utils', () => {
       mock('@blackbaud/skyux-logger', {
         info: function (text) {
           console.log(text);
-        }
+        },
       });
 
       args = {
-        endpoint: "https://localhost:5000/publisher",
-        audienceId: "Audience\\Id",
-        clientUserName: "t01\\example",
-        clientKey: "apassword"
+        endpoint: 'https://localhost:5000/publisher',
+        audienceId: 'Audience\\Id',
+        clientUserName: 't01\\example',
+        clientKey: 'apassword',
       };
 
       body = JSON.stringify({
-        test: 'test-body'
+        test: 'test-body',
       });
 
       makeRequest = mock.reRequire('./shared').makeRequest;
@@ -79,69 +79,101 @@ describe('Utils', () => {
     it('should error if no body is provided', () => {
       spyOn(console, 'log');
       makeRequest(args, undefined);
-      expect(console.log).toHaveBeenCalledWith(new Error('[ERROR]: A request body and config are required!'));
+      expect(console.log).toHaveBeenCalledWith(
+        new Error('[ERROR]: A request body and config are required!')
+      );
     });
 
     it('should error if no config is provided', () => {
       spyOn(console, 'log');
       makeRequest(undefined, body);
-      expect(console.log).toHaveBeenCalledWith(new Error('[ERROR]: A request body and config are required!'));
+      expect(console.log).toHaveBeenCalledWith(
+        new Error('[ERROR]: A request body and config are required!')
+      );
     });
 
     it('should post the json file', () => {
       let authCredentials = btoa(`${args.clientUserName}:${args.clientKey}`);
       spyOn(console, 'log');
       makeRequest(args, body);
-      emitter.emit('data', Buffer.from(JSON.stringify({
-        access_token: 'test'
-      })));
+      emitter.emit(
+        'data',
+        Buffer.from(
+          JSON.stringify({
+            access_token: 'test',
+          })
+        )
+      );
       emitter.emit('end');
       emitter.emit('response', {
-        statusCode: 200
+        statusCode: 200,
       });
       expect(console.log).toHaveBeenCalledWith(args.endpoint);
-      expect(console.log).toHaveBeenCalledWith(`https://service-authorization.sky.blackbaud.com/oauth2/token?grant_type=client_credentials&audience_id=${encodeURIComponent(args.audienceId)}`);
+      expect(console.log).toHaveBeenCalledWith(
+        `https://service-authorization.sky.blackbaud.com/oauth2/token?grant_type=client_credentials&audience_id=${encodeURIComponent(
+          args.audienceId
+        )}`
+      );
       expect(console.log).toHaveBeenCalledWith('Bearer test');
       expect(console.log).toHaveBeenCalledWith(`Basic ${authCredentials}`);
-      expect(console.log).toHaveBeenCalledWith(JSON.stringify({ test: 'test-body' }));
-      expect(console.log).toHaveBeenCalledWith('200: Search data successfully posted!');
+      expect(console.log).toHaveBeenCalledWith(
+        JSON.stringify({ test: 'test-body' })
+      );
+      expect(console.log).toHaveBeenCalledWith(
+        '200: Search data successfully posted!'
+      );
     });
 
     it('should throw an error if the authentication post was unsuccessful', () => {
       spyOn(console, 'log');
       makeRequest(args, body);
       emitter.emit('error', new Error('Unable to authenticate'));
-      expect(console.log).toHaveBeenCalledWith(new Error(`[ERROR]: Unable to retrieve SAS JWT! Unable to authenticate`));
+      expect(console.log).toHaveBeenCalledWith(
+        new Error(`[ERROR]: Unable to retrieve SAS JWT! Unable to authenticate`)
+      );
     });
 
     it('should throw an error if the file post was unsuccessful', () => {
       spyOn(console, 'log');
       makeRequest(args, body);
-      emitter.emit('data', Buffer.from(JSON.stringify({
-        access_token: 'test'
-      })));
+      emitter.emit(
+        'data',
+        Buffer.from(
+          JSON.stringify({
+            access_token: 'test',
+          })
+        )
+      );
       emitter.emit('end');
       emitter.emit('error', new Error('Unable to post search'));
-      expect(console.log).toHaveBeenCalledWith(new Error(`[ERROR]: Unable to post search data! Unable to post search`));
+      expect(console.log).toHaveBeenCalledWith(
+        new Error(`[ERROR]: Unable to post search data! Unable to post search`)
+      );
     });
 
     it('should throw an error if the status code on post !== 200', () => {
       spyOn(console, 'log');
-      let response = new IncomingMessage(new EventEmitter())
+      let response = new IncomingMessage(new EventEmitter());
       response.statusCode = 500;
       response.statusMessage = 'Error response';
 
       makeRequest(args, body);
-      emitter.emit('data', Buffer.from(JSON.stringify({
-        access_token: 'test'
-      })));
+      emitter.emit(
+        'data',
+        Buffer.from(
+          JSON.stringify({
+            access_token: 'test',
+          })
+        )
+      );
       emitter.emit('end');
       emitter.emit('response', response);
       response.emit('data', response.statusMessage);
       response.emit('end');
 
-      expect(console.log).toHaveBeenCalledWith(new Error(`[ERROR]: Unable to post search data! 500 : Error response`));
+      expect(console.log).toHaveBeenCalledWith(
+        new Error(`[ERROR]: Unable to post search data! 500 : Error response`)
+      );
     });
-
   });
 });

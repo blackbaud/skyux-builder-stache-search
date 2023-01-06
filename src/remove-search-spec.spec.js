@@ -9,29 +9,29 @@ describe('Remove Search Spec', () => {
     appSettings: {
       stache: {
         searchConfig: {
-          allowSiteToBeSearched: false
-        }
-      }
-    }
+          allowSiteToBeSearched: false,
+        },
+      },
+    },
   };
 
   beforeAll(() => {
     mock('fs-extra', {
-      existsSync: function(filePath) {
+      existsSync: function (filePath) {
         if (filePath) {
           console.log('File exists');
           return true;
         }
       },
-      unlinkSync: function(filePath) {
+      unlinkSync: function (filePath) {
         console.log(`File deleted: ${filePath}`);
-      }
+      },
     });
 
     mock('path', {
-      resolve: function() {
+      resolve: function () {
         return './e2e/stache-search.e2e-spec.ts';
-      }
+      },
     });
   });
 
@@ -69,7 +69,7 @@ describe('Remove Search Spec', () => {
       },
       unlinkSync: function () {
         console.log('I should not fire!');
-      }
+      },
     });
     spyOn(console, 'log');
     config.appSettings.stache.searchConfig.allowSiteToBeSearched = true;
@@ -80,20 +80,21 @@ describe('Remove Search Spec', () => {
 
   it('should throw an error if a problem occurs with deleting the file', () => {
     mock('path', {
-      join: function() {
+      join: function () {
         throw new Error('Test error');
-      }
+      },
     });
     removeSearchSpec = mock.reRequire('./remove-search-spec');
     config.appSettings.stache.searchConfig.allowSiteToBeSearched = true;
     let test = function () {
       return removeSearchSpec([], config);
-    }
-    expect(test).toThrowError('[ERROR]: Unable to remove stache search template from e2e directory.');
+    };
+    expect(test).toThrowError(
+      '[ERROR]: Unable to remove stache search template from e2e directory.'
+    );
   });
 
   afterAll(() => {
     mock.stopAll();
   });
-
 });

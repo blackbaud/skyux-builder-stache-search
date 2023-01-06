@@ -10,16 +10,16 @@ jobs:
   coverage:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-      with:
-        fetch-depth: 5
-    - uses: actions/setup-node@v3
-      with:
-        node-version: '16.18.1'
-    - name: Install and run tests
-      run: |
-        npm ci
-        npm run lint
-        npm test
-        bash <(curl -s https://codecov.io/bash)
-        npm run build
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 5
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16.18.1'
+      - name: Install and run tests
+        run: |
+          npm ci
+          npm run lint
+          npm test
+          bash <(curl -s https://codecov.io/bash)
+          npm run build

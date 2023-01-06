@@ -6,11 +6,14 @@ const utils = require('./utils/shared');
 
 function removeSearchJsonFileFromProject(argv, config) {
   if (utils.readConfig(config, 'allowSiteToBeSearched') === false) {
-    return; 
+    return;
   }
 
   try {
-    const filePath = path.resolve(process.cwd(), 'src/stache/search/search.json');
+    const filePath = path.resolve(
+      process.cwd(),
+      'src/stache/search/search.json'
+    );
     if (fs.existsSync(filePath)) {
       fs.unlinkSync(filePath);
       fs.rmdirSync(path.dirname(filePath));
