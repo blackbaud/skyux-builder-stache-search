@@ -19,6 +19,7 @@ jobs:
     - name: Install and run tests
       run: |
         npm ci
+        npm run lint
         npm test
         bash <(curl -s https://codecov.io/bash)
         npm run build
