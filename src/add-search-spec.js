@@ -2,6 +2,7 @@
 
 const path = require('path');
 const fs = require('fs-extra');
+const constants = require('./utils/constants');
 const utils = require('./utils/shared');
 const errorHandler = require('./error-handler');
 
@@ -18,21 +19,13 @@ function addSearchSpecToProject(argv, config) {
   }
 
   try {
-    let filePath = path.join(process.cwd(), 'e2e');
-
-    if (!fs.existsSync(filePath)) {
-      fs.mkdirSync(filePath);
-    }
-
     fs.copyFileSync(
       path.join(__dirname, 'templates/stache-search.spec.ts.template'),
-      path.join(process.cwd(), 'src/app/stache-search.spec.ts')
+      constants.SpecFilePath
     );
   } catch (error) {
     return errorHandler(
-      new Error(
-        '[ERROR]: Unable to add stache search template to e2e directory.'
-      ),
+      new Error('[ERROR]: Unable to add stache search spec file to project.'),
       config
     );
   }

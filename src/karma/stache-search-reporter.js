@@ -1,10 +1,10 @@
 const { ensureFileSync, writeJsonSync } = require('fs-extra');
-const { join } = require('path');
+const constants = require('../utils/constants');
 
-function stacheSearchReporter(_config) {
-  const outputFilePath = join(process.cwd(), 'src/stache/search/search.json');
+function stacheSearchReporter() {
+  const outputFilePath = constants.OutputFilePath;
 
-  this.onBrowserLog = function (_browser, log, _type) {
+  this.onBrowserLog = function (_browser, log) {
     if (!log) {
       return;
     }

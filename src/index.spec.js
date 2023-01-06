@@ -28,10 +28,6 @@ describe('Index', () => {
         cmd: 'stache-add-search-spec',
         lib: 'add-search-spec',
       },
-      'stache-add-e2e-config': {
-        cmd: 'stache-add-e2e-config',
-        lib: 'add-e2e-config',
-      },
       'stache-publish-search': {
         cmd: 'stache-publish-search',
         lib: 'publish-search',
@@ -39,10 +35,6 @@ describe('Index', () => {
       'stache-release-search': {
         cmd: 'stache-release-search',
         lib: 'release-search',
-      },
-      'stache-remove-e2e-config': {
-        cmd: 'stache-remove-e2e-config',
-        lib: 'remove-e2e-config',
       },
       'stache-remove-search-json': {
         cmd: 'stache-remove-search-json',
@@ -87,13 +79,13 @@ describe('Index', () => {
         return './src/fixtures/mock-config-nope.json';
       },
     });
-    mock('./add-e2e-config', (argv, config) => {
+    mock('./add-search-spec', (argv, config) => {
       console.log(config);
     });
 
     spyOn(console, 'log');
     index = mock.reRequire('../index');
-    index.runCommand('stache-add-e2e-config', {});
+    index.runCommand('stache-add-search-spec', {});
     expect(console.log).toHaveBeenCalledWith({});
   });
 

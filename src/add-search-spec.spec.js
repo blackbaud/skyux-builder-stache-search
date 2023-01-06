@@ -15,7 +15,6 @@ describe('Add Search Spec', () => {
       },
     },
   };
-  const filePath = './e2e/stache-search.e2e-spec.ts';
 
   beforeEach(() => {
     mock('./error-handler', function (error) {
@@ -23,23 +22,8 @@ describe('Add Search Spec', () => {
     });
 
     mock('fs-extra', {
-      existsSync: function (filePath) {
-        if (filePath) {
-          console.log('File exists');
-          return true;
-        }
-      },
-      mkdirSync: function () {
-        console.log('e2e directory created!');
-      },
-      writeFileSync: function (filePath) {
-        console.log(`Added ${filePath} to directory!`);
-      },
-    });
-
-    mock('path', {
-      join: function () {
-        return './e2e/stache-search.e2e-spec.ts';
+      copyFileSync: function () {
+        console.log('Copied files.');
       },
     });
 
@@ -68,36 +52,14 @@ describe('Add Search Spec', () => {
   it('should add the file if searchConfig is undefined', () => {
     spyOn(console, 'log');
     addSearchSpec(args, undefined);
-    expect(console.log).toHaveBeenCalledWith('File exists');
-    expect(console.log).toHaveBeenCalledWith(`Added ${filePath} to directory!`);
+    expect(console.log).toHaveBeenCalledWith('Copied files.');
   });
 
   it('should add the file if allowSiteToBeSearched is set to true', () => {
     config.appSettings.stache.searchConfig.allowSiteToBeSearched = true;
     spyOn(console, 'log');
     addSearchSpec(args, config);
-    expect(console.log).toHaveBeenCalledWith('File exists');
-    expect(console.log).toHaveBeenCalledWith(`Added ${filePath} to directory!`);
-  });
-
-  it('should create the e2e directory if it does not exist', () => {
-    config.appSettings.stache.searchConfig.allowSiteToBeSearched = true;
-    mock('fs-extra', {
-      existsSync: function () {
-        return false;
-      },
-      mkdirSync: function () {
-        console.log('e2e directory created!');
-      },
-      writeFileSync: function (filePath) {
-        console.log(`Added ${filePath} to directory!`);
-      },
-    });
-    addSearchSpec = mock.reRequire('./add-search-spec');
-    spyOn(console, 'log');
-    addSearchSpec(args, config);
-    expect(console.log).toHaveBeenCalledWith('e2e directory created!');
-    expect(console.log).toHaveBeenCalledWith(`Added ${filePath} to directory!`);
+    expect(console.log).toHaveBeenCalledWith('Copied files.');
   });
 
   it('should call the errorHandler if a problem occurs with adding the file', () => {
@@ -112,9 +74,7 @@ describe('Add Search Spec', () => {
     addSearchSpec(args, config);
 
     expect(console.log).toHaveBeenCalledWith(
-      new Error(
-        '[ERROR]: Unable to add stache search template to e2e directory.'
-      )
+      new Error('[ERROR]: Unable to add stache search spec file to project.')
     );
   });
 

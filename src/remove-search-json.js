@@ -2,6 +2,7 @@
 
 const fs = require('fs-extra');
 const path = require('path');
+const constants = require('./utils/constants');
 const utils = require('./utils/shared');
 
 function removeSearchJsonFileFromProject(argv, config) {
@@ -10,10 +11,7 @@ function removeSearchJsonFileFromProject(argv, config) {
   }
 
   try {
-    const filePath = path.resolve(
-      process.cwd(),
-      'src/stache/search/search.json'
-    );
+    const filePath = constants.OutputFilePath;
     if (fs.existsSync(filePath)) {
       fs.unlinkSync(filePath);
       fs.rmdirSync(path.dirname(filePath));

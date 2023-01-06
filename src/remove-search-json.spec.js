@@ -35,7 +35,7 @@ describe('Remove Search JSON', () => {
       dirname: function () {
         return './src/stache/search/';
       },
-      resolve: function () {
+      join: function () {
         return './src/stache/search/search.json';
       },
     });

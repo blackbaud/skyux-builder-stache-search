@@ -21,17 +21,11 @@ module.exports = {
       case 'stache-add-search-spec':
         require('./src/add-search-spec')(argv, config);
         break;
-      case 'stache-add-e2e-config':
-        require('./src/add-e2e-config')(argv, config);
-        break;
       case 'stache-publish-search':
         require('./src/publish-search')(argv, config);
         break;
       case 'stache-release-search':
         require('./src/release-search')(argv, config);
-        break;
-      case 'stache-remove-e2e-config':
-        require('./src/remove-e2e-config')(argv, config);
         break;
       case 'stache-remove-search-json':
         require('./src/remove-search-json')(argv, config);
