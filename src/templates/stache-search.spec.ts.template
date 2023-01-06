@@ -1,0 +1,202 @@
+import { NgModule } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
+import { SkyAppConfig } from '@skyux/config';
+
+import { SkyAppTestModule } from './__skyux/testing';
+import { AppComponent } from './app.component';
+
+let STYLE_EL: HTMLStyleElement;
+
+interface SearchConfig {
+  id: string;
+  is_internal: boolean;
+  is_globally_searchable: boolean;
+  site_names: string[];
+}
+
+interface SearchPage {
+  host: string;
+  is_internal: boolean;
+  is_globally_searchable: boolean;
+  path: string;
+  site_name: string;
+  text: string;
+  title?: string;
+}
+
+interface SearchJson {
+  config: SearchConfig;
+  site_name: string;
+  stache_page_search_data: SearchPage[];
+}
+
+/**
+ * NgModule as workaround for "Navigation triggered outside Angular zone" in tests.
+ * @see https://github.com/angular/angular/issues/47236
+ */
+@NgModule()
+export class FixNavigationTriggeredOutsideAngularZoneNgModule {
+  constructor(_router: Router) {}
+}
+
+function getSearchConfig(
+  appConfig: SkyAppConfig,
+  appName: string
+): SearchConfig {
+  const searchConfig: SearchConfig = {
+    id: appName,
+    site_names: [appName],
+    is_internal: true,
+    is_globally_searchable: true,
+  };
+
+  const preferences = appConfig.skyux.appSettings?.stache?.searchConfig;
+
+  if (preferences) {
+    searchConfig.site_names = preferences.site_names || searchConfig.site_names;
+
+    searchConfig.is_internal =
+      preferences.is_internal !== undefined
+        ? preferences.is_internal
+        : searchConfig.is_internal;
+
+    searchConfig.is_globally_searchable =
+      preferences.is_globally_searchable !== undefined
+        ? preferences.is_globally_searchable
+        : searchConfig.is_globally_searchable;
+  }
+
+  return searchConfig;
+}
+
+async function navigate(
+  fixture: ComponentFixture<AppComponent>,
+  route: string
+) {
+  const router = TestBed.inject(Router);
+  await router.navigate([route]);
+  fixture.detectChanges();
+  await fixture.whenStable();
+  await fixture.whenRenderingDone();
+}
+
+function hideElements() {
+  STYLE_EL = document.createElement('style');
+  STYLE_EL.innerHTML = `
+  [skyRestrictedView],
+  sky-restricted-view,
+  sky-skip-link-host,
+  stache-hide-from-search,
+  .sky-restricted-view,
+  .stache-breadcrumbs,
+  .stache-sidebar,
+  .stache-table-of-contents {
+    display: none;
+  }
+`;
+  document.head.appendChild(STYLE_EL);
+}
+
+describe('Stache Search', () => {
+  let configSvc: SkyAppConfig;
+  let fixture: ComponentFixture<AppComponent>;
+
+  beforeEach(() => {
+    // Mock auth client.
+    (window as any).BBAuthClient = {};
+
+    TestBed.configureTestingModule({
+      imports: [
+        SkyAppTestModule,
+        RouterTestingModule,
+        FixNavigationTriggeredOutsideAngularZoneNgModule,
+      ],
+    });
+
+    fixture = TestBed.createComponent(AppComponent);
+    configSvc = TestBed.inject(SkyAppConfig);
+  });
+
+  afterEach(() => {
+    document.head.removeChild(STYLE_EL);
+  });
+
+  it('should scrape page contents', async () => {
+    const routes: string[] =
+      configSvc.skyux.appSettings?.stache?.searchConfig?.routes;
+
+    if (!routes) {
+      console.error('Searchable routes are not defined.');
+      return;
+    }
+
+    const appName = (configSvc.skyux as any).angularSettings
+      ?.defaultProject as string;
+
+    const searchConfig = getSearchConfig(configSvc, appName);
+
+    const content: SearchJson = {
+      config: searchConfig,
+      site_name: appName,
+      stache_page_search_data: [],
+    };
+
+    const url = configSvc.skyux.host!.url!;
+
+    for (const route of routes) {
+      await navigate(fixture, route);
+
+      const pageContent: SearchPage = {
+        host: url,
+        is_globally_searchable: searchConfig.is_globally_searchable,
+        is_internal: searchConfig.is_internal,
+        path: route,
+        site_name: appName,
+        text: '',
+      };
+
+      const privateContent: string[] = [];
+
+      // Save private content from public-facing apps in a separate entry.
+      if (!pageContent.is_internal) {
+        document
+          .querySelectorAll(
+            'skyux-restricted-view, .skyux-restricted-view, [skyRestrictedView]'
+          )
+          .forEach((el) => privateContent.push((el as HTMLElement).innerText));
+      }
+
+      // Hide content that should not be searchable.
+      hideElements();
+
+      // Use innerText since it only returns visible content.
+      const text = document.body.innerText.replace(/\\n/g, ' ');
+
+      if (text) {
+        pageContent.text = text;
+        pageContent.title = (
+          document.querySelector(
+            '.stache-page-title, .stache-tutorial-heading, h1'
+          ) as HTMLElement
+        ).innerText;
+
+        content.stache_page_search_data.push(pageContent);
+
+        // Add the internal-only content if the page is public-facing.
+        if (privateContent.length > 0 && !pageContent['is_internal']) {
+          const privatePageContent = Object.assign({}, pageContent);
+          privatePageContent.text = privateContent.join('\\n');
+          privatePageContent.is_internal = true;
+          if (privatePageContent.text) {
+            content.stache_page_search_data.push(privatePageContent);
+          }
+        }
+      }
+    }
+
+    // Our karma reporter picks up this log to create a JSON file.
+    console.log(`{"stacheSearch":${JSON.stringify(content, undefined, 2)}}`);
+  });
+});
