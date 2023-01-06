@@ -1,7 +1,7 @@
 const btoa = require('btoa');
 const request = require('request');
+const logger = require('@blackbaud/skyux-logger');
 const errorHandler = require('../error-handler');
-const logger = require('./logger');
 
 function makeRequest(config, body) {
   if (!body || !config) {

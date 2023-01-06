@@ -1,4 +1,4 @@
-const logger = require('./utils/logger');
+const logger = require('@blackbaud/skyux-logger');
 
 function errorHandler(err, config) {
   logger.error(err);
