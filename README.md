@@ -22,7 +22,12 @@ Add `searchConfig` to the `stache` object in your `skyuxconfig.json` file's `app
       "allowSiteToBeSearched": true,
       "is_internal": true,
       "site_names": ['stache2'],
-      "is_globally_searchable": true
+      "is_globally_searchable": true,
+      "routes": [
+        "/",
+        "/about",
+        "/about/contributing"
+      ]
     }
   }
 }
