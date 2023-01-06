@@ -9,10 +9,10 @@ describe('Remove e2e config', () => {
     appSettings: {
       stache: {
         searchConfig: {
-          allowSiteToBeSearched: false
-        }
-      }
-    }
+          allowSiteToBeSearched: false,
+        },
+      },
+    },
   };
 
   beforeAll(() => {
@@ -25,13 +25,13 @@ describe('Remove e2e config', () => {
       },
       unlinkSync: function (filePath) {
         console.log(`File deleted: ${filePath}`);
-      }
+      },
     });
 
     mock('path', {
       resolve: function () {
         return './skyuxconfig.e2e.json';
-      }
+      },
     });
   });
 
@@ -70,7 +70,7 @@ describe('Remove e2e config', () => {
       },
       unlinkSync: function () {
         console.log('I should not fire!');
-      }
+      },
     });
     spyOn(console, 'log');
     removeE2EConfig = mock.reRequire('./remove-e2e-config');
@@ -82,17 +82,18 @@ describe('Remove e2e config', () => {
     mock('path', {
       resolve: function () {
         throw new Error('Test error');
-      }
+      },
     });
     removeE2EConfig = mock.reRequire('./remove-e2e-config');
     let test = function () {
       return removeE2EConfig([], undefined);
-    }
-    expect(test).toThrowError('[ERROR]: Unable to remove skyuxconfig.e2e.json.');
+    };
+    expect(test).toThrowError(
+      '[ERROR]: Unable to remove skyuxconfig.e2e.json.'
+    );
   });
 
   afterAll(() => {
     mock.stopAll();
   });
-
 });

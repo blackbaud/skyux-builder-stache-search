@@ -9,10 +9,10 @@ describe('Add e2e config', () => {
     appSettings: {
       stache: {
         searchConfig: {
-          allowSiteToBeSearched: false
-        }
-      }
-    }
+          allowSiteToBeSearched: false,
+        },
+      },
+    },
   };
   const filePath = './skyuxconfig.e2e.json';
 
@@ -28,15 +28,15 @@ describe('Add e2e config', () => {
       writeJsonSync: function (filePath, contents) {
         console.log(`Added ${filePath} to directory!`);
         console.log(JSON.stringify(contents));
-      }
+      },
     });
 
     mock('path', {
       join: function () {
         return './skyuxconfig.e2e.json';
-      }
+      },
     });
-    
+
     addE2EConfig = mock.reRequire('./add-e2e-config');
   });
 
@@ -51,7 +51,7 @@ describe('Add e2e config', () => {
     mock('fs-extra', {
       existsSync: function () {
         return true;
-      }
+      },
     });
     addE2EConfig = mock.reRequire('./add-e2e-config');
     spyOn(fs, 'writeJsonSync');
@@ -63,12 +63,14 @@ describe('Add e2e config', () => {
     spyOn(console, 'log');
     addE2EConfig([], {});
     expect(console.log).toHaveBeenCalledWith(`Added ${filePath} to directory!`);
-    expect(console.log).toHaveBeenCalledWith(JSON.stringify({
-      omnibar: false,
-      host: {
-        url: 'https://host.nxt.blackbaud.com'
-      }
-    }));
+    expect(console.log).toHaveBeenCalledWith(
+      JSON.stringify({
+        omnibar: false,
+        host: {
+          url: 'https://host.nxt.blackbaud.com',
+        },
+      })
+    );
   });
 
   it('should add the e2e config file if search is true', () => {
@@ -76,26 +78,32 @@ describe('Add e2e config', () => {
     spyOn(console, 'log');
     addE2EConfig([], {});
     expect(console.log).toHaveBeenCalledWith(`Added ${filePath} to directory!`);
-    expect(console.log).toHaveBeenCalledWith(JSON.stringify({
-      omnibar: false,
-      host: {
-        url: 'https://host.nxt.blackbaud.com'
-      }
-    }));
+    expect(console.log).toHaveBeenCalledWith(
+      JSON.stringify({
+        omnibar: false,
+        host: {
+          url: 'https://host.nxt.blackbaud.com',
+        },
+      })
+    );
   });
 
   it('should call the errorHandler if a problem occurs with adding the file', () => {
     mock('path', {
       join: function () {
         throw new Error('Test error');
-      }
+      },
     });
     addE2EConfig = mock.reRequire('./add-e2e-config');
     config.appSettings.stache.searchConfig.allowSiteToBeSearched = true;
     spyOn(console, 'log');
     addE2EConfig([], {});
 
-    expect(console.log).toHaveBeenCalledWith(new Error('[ERROR]: Unable to add stache search template to e2e directory.'));
+    expect(console.log).toHaveBeenCalledWith(
+      new Error(
+        '[ERROR]: Unable to add stache search template to e2e directory.'
+      )
+    );
   });
 
   afterAll(() => {

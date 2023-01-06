@@ -47,7 +47,7 @@ This setting determines which Stache sites should be included in the search resu
 
 ### is_globally_searchable
 
-This setting determines whether the site will be included on the global search page.  The default is set `true`, allowing your sites content to appear on the global [stache search](https://docs.blackbaud.com/docs-search/). If set to `false`, your site content will only be searchable when queried directly.
+This setting determines whether the site will be included on the global search page. The default is set `true`, allowing your sites content to appear on the global [stache search](https://docs.blackbaud.com/docs-search/). If set to `false`, your site content will only be searchable when queried directly.
 
 ## Found an issue?
 

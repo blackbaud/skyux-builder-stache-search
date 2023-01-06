@@ -6,7 +6,7 @@ const utils = require('./utils/shared');
 
 function removeE2EConfig(argv, config) {
   if (utils.readConfig(config, 'allowSiteToBeSearched') === false) {
-    return; 
+    return;
   }
 
   try {

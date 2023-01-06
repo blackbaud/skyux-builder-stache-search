@@ -9,10 +9,10 @@ describe('Remove Search JSON', () => {
     appSettings: {
       stache: {
         searchConfig: {
-          allowSiteToBeSearched: false
-        }
-      }
-    }
+          allowSiteToBeSearched: false,
+        },
+      },
+    },
   };
 
   beforeAll(() => {
@@ -28,7 +28,7 @@ describe('Remove Search JSON', () => {
       },
       unlinkSync: function (filePath) {
         console.log(`File deleted: ${filePath}`);
-      }
+      },
     });
 
     mock('path', {
@@ -37,7 +37,7 @@ describe('Remove Search JSON', () => {
       },
       resolve: function () {
         return './src/stache/search/search.json';
-      }
+      },
     });
   });
 
@@ -55,7 +55,9 @@ describe('Remove Search JSON', () => {
     const filePath = './src/stache/search/search.json';
     spyOn(console, 'log');
     removeSearchJSON([], undefined);
-    expect(console.log).toHaveBeenCalledWith(`Directory deleted: ${filePath.slice(0, -11)}`);
+    expect(console.log).toHaveBeenCalledWith(
+      `Directory deleted: ${filePath.slice(0, -11)}`
+    );
     expect(console.log).toHaveBeenCalledWith(`File deleted: ${filePath}`);
     expect(console.log).toHaveBeenCalledWith('File exists');
   });
@@ -65,7 +67,9 @@ describe('Remove Search JSON', () => {
     config.appSettings.stache.searchConfig.allowSiteToBeSearched = true;
     spyOn(console, 'log');
     removeSearchJSON([], config);
-    expect(console.log).toHaveBeenCalledWith(`Directory deleted: ${filePath.slice(0, -11)}`);
+    expect(console.log).toHaveBeenCalledWith(
+      `Directory deleted: ${filePath.slice(0, -11)}`
+    );
     expect(console.log).toHaveBeenCalledWith(`File deleted: ${filePath}`);
     expect(console.log).toHaveBeenCalledWith('File exists');
   });
@@ -77,7 +81,7 @@ describe('Remove Search JSON', () => {
       },
       unlinkSync: function () {
         console.log('I should not fire!');
-      }
+      },
     });
     spyOn(console, 'log');
     config.appSettings.stache.searchConfig.allowSiteToBeSearched = true;
@@ -90,18 +94,19 @@ describe('Remove Search JSON', () => {
     mock('path', {
       resolve: function () {
         throw new Error('Test error');
-      }
+      },
     });
     removeSearchJSON = mock.reRequire('./remove-search-json');
     config.appSettings.stache.searchConfig.allowSiteToBeSearched = true;
     let test = function () {
       return removeSearchJSON([], config);
-    }
-    expect(test).toThrowError('[ERROR]: Unable to remove stache search directory.');
+    };
+    expect(test).toThrowError(
+      '[ERROR]: Unable to remove stache search directory.'
+    );
   });
 
   afterAll(() => {
     mock.stopAll();
   });
-
 });
