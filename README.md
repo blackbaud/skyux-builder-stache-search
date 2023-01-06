@@ -49,6 +49,15 @@ This setting determines which Stache sites should be included in the search resu
 
 This setting determines whether the site will be included on the global search page. The default is set `true`, allowing your sites content to appear on the global [stache search](https://docs.blackbaud.com/docs-search/). If set to `false`, your site content will only be searchable when queried directly.
 
+## CLI
+
+skyux stache-add-search-spec --siteName "$(SPAId)"
+skyux stache-add-e2e-config
+skyux stache-publish-search --endpoint $endpoint --audienceId $audienceId --clientUserName $clientUserName --clientKey $clientKey --buildVersion $buildVersion
+skyux stache-remove-e2e-config
+skyux stache-remove-search-spec
+skyux stache-remove-search-json
+
 ## Found an issue?
 
 Please log all issues related to Stache (and its plugins) at [blackbaud/stache2](https://github.com/blackbaud/stache2/issues).
