@@ -3,7 +3,7 @@ const request = require('request');
 const logger = require('@blackbaud/skyux-logger');
 const errorHandler = require('../error-handler');
 
-function makeRequest(config, body) {
+function makeRequest(config, body, method = 'POST') {
   if (!body || !config) {
     return errorHandler(
       new Error('[ERROR]: A request body and config are required!')
@@ -15,7 +15,7 @@ function makeRequest(config, body) {
   let encodedCredentials = btoa(`${clientUserName}:${clientKey}`);
 
   const sasOptions = {
-    method: 'POST',
+    method,
     uri: `https://service-authorization.sky.blackbaud.com/oauth2/token?grant_type=client_credentials&audience_id=${encodeURIComponent(
       audienceId
     )}`,

@@ -24,6 +24,9 @@ module.exports = {
       case 'stache-add-e2e-config':
         require('./src/add-e2e-config')(argv, config);
         break;
+      case 'stache-delete-search-data':
+        require('./src/delete-search-data')(argv, config);
+        break;
       case 'stache-publish-search':
         require('./src/publish-search')(argv, config);
         break;
