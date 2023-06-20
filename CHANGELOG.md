@@ -1,6 +1,6 @@
 # 2.3.0 (06-20-23)
 
-- Added `stache-delete-search-data` command.
+- Added `stache-delete-search-data` command. [#50](https://github.com/blackbaud/skyux-builder-stache-search/pull/50)
 
 # 2.2.0 (05-11-21)
 
